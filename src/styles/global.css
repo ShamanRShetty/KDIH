@@ -348,3 +348,29 @@ ul, ol {
     font-size: var(--text-3xl);
   }
 }
+
+/* --- PWA Update Notification Banner --- */
+.update-banner {
+  background-color: var(--color-primary-surface);
+  border-bottom: 1px solid var(--color-primary-light);
+  padding: 0.5rem 1rem;
+  font-size: var(--text-xs);
+  color: var(--color-primary-dark);
+  position: sticky;
+  top: var(--header-height);
+  z-index: 98;
+}
+
+.update-banner-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.update-btn {
+  padding: 0.25rem 0.75rem;
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+

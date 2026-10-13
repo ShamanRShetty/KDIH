@@ -1,0 +1,46 @@
+{
+  "name": "NammaSahaaya — Your Everyday Kannada Assistant",
+  "short_name": "NammaSahaaya",
+  "description": "Speak Kannada with confidence in everyday situations using situation-based phrase cards, audio, and guided conversations.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f7f9fb",
+  "theme_color": "#0f4c75",
+  "lang": "en",
+  "categories": ["education", "utilities", "travel"],
+  "icons": [
+    {
+      "src": "/pwa-icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "48x48",
+      "type": "image/svg+xml"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Transportation Phrases",
+      "short_name": "Transport",
+      "url": "/situation/transportation",
+      "description": "Bus, auto, ticket, and direction phrases"
+    },
+    {
+      "name": "Shopping Phrases",
+      "short_name": "Shopping",
+      "url": "/situation/shopping",
+      "description": "Prices, quantities, and market phrases"
+    },
+    {
+      "name": "Saved Favourites",
+      "short_name": "Favourites",
+      "url": "/favourites",
+      "description": "Quick access to your saved phrases"
+    }
+  ]
+}

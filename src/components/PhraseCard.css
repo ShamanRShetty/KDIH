@@ -1,5 +1,6 @@
 .phrase-card {
   padding: var(--space-md) var(--space-lg);
+  position: relative;
 }
 
 .phrase-card-main {
@@ -29,8 +30,10 @@
 
 .phrase-card-kannada {
   font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
   color: var(--color-text);
   margin-bottom: var(--space-xs);
+  line-height: 1.4;
 }
 
 .phrase-card-transliteration {
@@ -48,28 +51,43 @@
 
 .phrase-card-actions {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   gap: var(--space-xs);
   flex-shrink: 0;
 }
 
-.phrase-card-fav,
-.phrase-card-expand {
-  width: 36px;
-  height: 36px;
+/* Touch-friendly action buttons (minimum 44x44px for accessibility) */
+.phrase-action-btn {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-full);
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   color: var(--color-text-muted);
-  transition: color var(--transition-fast),
-              background-color var(--transition-fast);
+  background-color: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
 }
 
-.phrase-card-fav:hover,
-.phrase-card-expand:hover {
+.phrase-action-btn:hover {
   background-color: var(--color-bg);
+  color: var(--color-text);
+  border-color: var(--color-border-light);
+}
+
+.phrase-action-btn:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.phrase-card-fav {
+  font-size: var(--text-lg);
 }
 
 .phrase-card-fav--active {
@@ -92,4 +110,25 @@
 .phrase-card-context-label {
   font-weight: var(--font-semibold);
   color: var(--color-text);
+}
+
+/* Mobile responsive optimizations */
+@media (max-width: 480px) {
+  .phrase-card {
+    padding: var(--space-md);
+  }
+
+  .phrase-card-main {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .phrase-card-actions {
+    align-self: flex-end;
+    width: 100%;
+    justify-content: flex-end;
+    border-top: 1px dashed var(--color-border-light);
+    padding-top: var(--space-xs);
+    margin-top: var(--space-xs);
+  }
 }

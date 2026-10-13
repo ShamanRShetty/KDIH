@@ -170,3 +170,15 @@ export function getPhrasesNeedingReview() {
     (phrase) => phrase.verificationStatus === 'needs_review'
   );
 }
+
+/**
+ * Finds a phrase by its unique ID.
+ *
+ * @param {string} id
+ * @returns {object|null}
+ */
+export function getPhraseById(id) {
+  if (!id) return null;
+  return getAllPhrases().find((p) => p.id === id) || null;
+}
+

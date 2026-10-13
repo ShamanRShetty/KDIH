@@ -1,0 +1,107 @@
+.audio-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+  position: relative;
+  /* Minimum recommended touch target */
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.audio-btn--sm {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
+  font-size: var(--text-sm);
+}
+
+.audio-btn--md {
+  width: 44px;
+  height: 44px;
+  font-size: var(--text-base);
+}
+
+.audio-btn--lg {
+  width: 52px;
+  height: 52px;
+  font-size: var(--text-lg);
+  background-color: var(--color-primary-surface);
+  color: var(--color-primary);
+  border-color: var(--color-primary-light);
+}
+
+.audio-btn:hover {
+  background-color: var(--color-bg);
+  color: var(--color-primary);
+  border-color: var(--color-border-light);
+}
+
+.audio-btn:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.audio-btn--playing {
+  background-color: var(--color-primary-surface) !important;
+  color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px rgba(15, 76, 117, 0.15);
+}
+
+.audio-btn--error {
+  border-color: var(--color-healthcare) !important;
+  color: var(--color-healthcare) !important;
+}
+
+.audio-btn--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.audio-btn-icon {
+  line-height: 1;
+}
+
+/* Audio wave animation indicator */
+.audio-wave {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+  margin-left: 4px;
+}
+
+.audio-wave-bar {
+  width: 2px;
+  background-color: var(--color-primary);
+  border-radius: 1px;
+  animation: waveBar 0.8s ease-in-out infinite alternate;
+}
+
+.audio-wave-bar:nth-child(1) {
+  height: 4px;
+  animation-delay: 0.1s;
+}
+
+.audio-wave-bar:nth-child(2) {
+  height: 10px;
+  animation-delay: 0.25s;
+}
+
+.audio-wave-bar:nth-child(3) {
+  height: 6px;
+  animation-delay: 0.4s;
+}
+
+@keyframes waveBar {
+  0% { height: 3px; }
+  100% { height: 12px; }
+}

@@ -21,23 +21,34 @@
 
 .settings-font-options {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--space-sm);
 }
 
 .settings-font-btn {
-  padding: 0.625rem 1.25rem;
+  padding: 0.75rem 1.25rem;
   font-size: var(--text-sm);
   font-weight: var(--font-medium);
   border: 1.5px solid var(--color-border);
   border-radius: var(--radius-md);
   color: var(--color-text);
   background-color: var(--color-bg);
-  transition: border-color var(--transition-fast),
-              background-color var(--transition-fast);
+  cursor: pointer;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
 }
 
 .settings-font-btn:hover {
   border-color: var(--color-primary);
+  background-color: var(--color-surface);
+}
+
+.settings-font-btn:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .settings-font-btn--active {
@@ -45,6 +56,48 @@
   background-color: var(--color-primary-surface);
   color: var(--color-primary);
   font-weight: var(--font-semibold);
+}
+
+.settings-audit-card {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin-top: var(--space-xs);
+}
+
+.settings-audit-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-xs) 0;
+  font-size: var(--text-sm);
+  border-bottom: 1px dashed var(--color-border-light);
+  gap: var(--space-xs);
+}
+
+.settings-audit-row:last-of-type {
+  border-bottom: none;
+}
+
+.settings-audit-label {
+  color: var(--color-text-secondary);
+  font-weight: var(--font-medium);
+}
+
+.settings-audit-val {
+  color: var(--color-text);
+  font-weight: var(--font-semibold);
+}
+
+.settings-audit-disclaimer {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin-top: var(--space-md);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-border-light);
 }
 
 .settings-about p {
@@ -59,17 +112,6 @@
 }
 
 .settings-about-meta {
-  font-size: var(--text-xs);
   color: var(--color-text-muted);
-}
-
-.settings-upcoming-list {
-  list-style: disc;
-  padding-left: var(--space-lg);
-}
-
-.settings-upcoming-list li {
-  font-size: var(--text-sm);
-  color: var(--color-text-secondary);
-  line-height: 1.8;
+  font-size: var(--text-xs);
 }

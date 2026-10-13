@@ -1,0 +1,39 @@
+.offline-indicator {
+  background-color: #fff3cd;
+  color: #856404;
+  border-bottom: 1px solid #ffeeba;
+  padding: 0.5rem 1rem;
+  font-size: var(--text-xs);
+  line-height: 1.4;
+  position: relative;
+  z-index: 99;
+  animation: slideDown 0.25s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.offline-indicator-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  text-align: center;
+}
+
+.offline-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.offline-text {
+  font-weight: var(--font-medium);
+}

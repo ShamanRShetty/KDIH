@@ -1,17 +1,43 @@
+import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
+import OfflineIndicator from './components/OfflineIndicator';
 import HomePage from './pages/HomePage';
 import ExplorePage from './pages/ExplorePage';
 import SituationPage from './pages/SituationPage';
 import FavouritesPage from './pages/FavouritesPage';
 import SettingsPage from './pages/SettingsPage';
+import { registerServiceWorker, applyServiceWorkerUpdate } from './utils/pwaUtils';
 import './styles/global.css';
 
 export default function App() {
+  const [updateAvailable, setUpdateAvailable] = useState(false);
+
+  useEffect(() => {
+    // Register service worker and handle update notification
+    registerServiceWorker(() => {
+      setUpdateAvailable(true);
+    });
+  }, []);
+
   return (
     <BrowserRouter>
       <Header />
+      <OfflineIndicator />
+      {updateAvailable && (
+        <div className="update-banner" role="alert">
+          <div className="container update-banner-inner">
+            <span>✨ An updated version of NammaSahaaya is ready!</span>
+            <button
+              className="btn btn-sm btn-primary update-btn"
+              onClick={() => applyServiceWorkerUpdate()}
+            >
+              Update Now
+            </button>
+          </div>
+        </div>
+      )}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/explore" element={<ExplorePage />} />
