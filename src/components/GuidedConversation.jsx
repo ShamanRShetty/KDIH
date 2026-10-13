@@ -20,7 +20,6 @@ export default function GuidedConversation({
   isFavourite,
   onToggleFavourite,
 }) {
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [history, setHistory] = useState([conversation.steps[0].id]);
 
   if (!conversation || !conversation.steps || conversation.steps.length === 0) {

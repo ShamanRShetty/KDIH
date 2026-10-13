@@ -134,7 +134,7 @@ self.addEventListener('fetch', (event) => {
             }
             return networkResponse;
           })
-          .catch((err) => {
+          .catch(() => {
             // If offline, cachedResponse will be returned
             return cachedResponse;
           });

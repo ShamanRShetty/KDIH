@@ -33,14 +33,17 @@ export default function SettingsPage() {
     });
   }, []);
 
-  const handleFontSizeChange = (value) => {
-    setFontSize(value);
-    document.documentElement.style.fontSize = value;
+  useEffect(() => {
+    document.documentElement.style.fontSize = fontSize;
     try {
-      localStorage.setItem('nammasahaaya_fontsize', value);
+      localStorage.setItem('nammasahaaya_fontsize', fontSize);
     } catch {
       // fail silently
     }
+  }, [fontSize]);
+
+  const handleFontSizeChange = (value) => {
+    setFontSize(value);
   };
 
   return (
