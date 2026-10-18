@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import SituationCard from '../components/SituationCard';
 import PhraseCard from '../components/PhraseCard';
+import AiPhraseAssistant from '../components/AiPhraseAssistant';
 import useFavourites from '../hooks/useFavourites';
 import situations from '../data/situations';
 import { getAllPhrases } from '../utils/phraseUtils';
@@ -160,16 +161,24 @@ export default function ExplorePage() {
             )}
           </section>
         ) : (
-          <section aria-label="Browse by situation">
-            <h2 className="section-heading explore-grid-heading">
-              Browse by Situation
-            </h2>
-            <div className="situations-grid">
-              {situations.map((situation) => (
-                <SituationCard key={situation.id} situation={situation} />
-              ))}
-            </div>
-          </section>
+          <>
+            {/* Optional AI-Powered Phrase Assistant */}
+            <AiPhraseAssistant
+              isFavourite={isFavourite}
+              onToggleFavourite={toggleFavourite}
+            />
+
+            <section aria-label="Browse by situation">
+              <h2 className="section-heading explore-grid-heading">
+                Browse by Situation
+              </h2>
+              <div className="situations-grid">
+                {situations.map((situation) => (
+                  <SituationCard key={situation.id} situation={situation} />
+                ))}
+              </div>
+            </section>
+          </>
         )}
       </div>
     </main>

@@ -5,9 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "server": "node backend/server.js",
+    "test:backend": "node --test backend/test/backend-validation.test.mjs",
+    "test:frontend": "node test-audit.mjs",
+    "test": "node --test backend/test/backend-validation.test.mjs && node test-audit.mjs",
     "build": "vite build",
     "lint": "oxlint",
-    "test": "node test-audit.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

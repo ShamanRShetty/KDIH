@@ -1,7 +1,7 @@
 /**
  * Utility functions for loading, validating, and filtering NammaSahaaya phrases.
  */
-import rawPhrases from '../data/phrases.json';
+import rawPhrases from '../data/phrases.json' with { type: 'json' };
 
 export const REQUIRED_FIELDS = [
   'id',
