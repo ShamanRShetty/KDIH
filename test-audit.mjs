@@ -56,7 +56,7 @@ const conversations = [
   }
 ];
 
-const VALID_CATEGORIES = new Set(['transportation', 'shopping', 'healthcare', 'directions']);
+const VALID_CATEGORIES = new Set(['transportation', 'shopping', 'healthcare', 'directions', 'emergency', 'food']);
 const REQUIRED_FIELDS = [
   'id',
   'category',
@@ -74,7 +74,7 @@ console.log('Testing dataset integrity...');
 
 // 1. Check array length
 assert.ok(Array.isArray(phrases), 'Phrases should be an array');
-assert.ok(phrases.length >= 40 && phrases.length <= 60, `Dataset size ${phrases.length} should be 40-60`);
+assert.ok(phrases.length >= 40 && phrases.length <= 80, `Dataset size ${phrases.length} should be 40-80`);
 
 // 2. Check unique IDs & required fields
 const phraseMap = new Map();

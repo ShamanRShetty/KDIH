@@ -6,11 +6,15 @@ import { useState, useEffect } from 'react';
  */
 let currentAudioStopper = null;
 
+// Keep an active reference to prevent utterance garbage collection in Chromium
+let activeUtterance = null;
+
 export function stopCurrentAudio() {
   if (currentAudioStopper) {
     currentAudioStopper();
     currentAudioStopper = null;
   }
+  activeUtterance = null;
   if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
     try {
       window.speechSynthesis.cancel();
@@ -18,6 +22,13 @@ export function stopCurrentAudio() {
       // ignore
     }
   }
+}
+
+/**
+ * Returns currently speaking utterance reference.
+ */
+export function getActiveUtterance() {
+  return activeUtterance;
 }
 
 /**
@@ -65,7 +76,7 @@ export function inspectVoices() {
     if (immediate.totalVoices > 0) {
       resolve(immediate);
     } else {
-      // Voices may load asynchronously in Chrome/Edge
+      // Voices may load asynchronously in Chrome/Brave/Edge
       const handleVoicesChanged = () => {
         window.speechSynthesis.removeEventListener('voiceschanged', handleVoicesChanged);
         resolve(check());
@@ -78,6 +89,36 @@ export function inspectVoices() {
       }, 500);
     }
   });
+}
+
+/**
+ * Finds the best available voice in Chromium/Brave/Chrome/Edge/Firefox.
+ * 1. Dedicated Kannada voice ('kn-IN', 'kn', 'kannada')
+ * 2. Indian regional multilingual voices ('hi-IN', 'ta-IN', 'te-IN', 'mr-IN', 'en-IN') that have Indian phonetic TTS engines
+ * 3. Default browser fallback voice
+ */
+function findBestVoice(voices) {
+  if (!voices || voices.length === 0) return null;
+
+  // 1. Exact Kannada voice match
+  const kannadaVoice = voices.find(
+    (v) =>
+      (v.lang && (v.lang.toLowerCase().startsWith('kn') || v.lang.toLowerCase().includes('knda'))) ||
+      (v.name && v.name.toLowerCase().includes('kannada'))
+  );
+  if (kannadaVoice) return kannadaVoice;
+
+  // 2. Indian voice (hi-IN, en-IN, etc.) which can handle Indic/phonetic pronunciations
+  const indianVoice = voices.find(
+    (v) =>
+      (v.lang && (v.lang.toLowerCase().endsWith('-in') || v.lang.toLowerCase().startsWith('hi'))) ||
+      (v.name && (v.name.toLowerCase().includes('india') || v.name.toLowerCase().includes('hindi')))
+  );
+  if (indianVoice) return indianVoice;
+
+  // 3. System default voice
+  const defaultVoice = voices.find((v) => v.default);
+  return defaultVoice || voices[0] || null;
 }
 
 /**
@@ -141,27 +182,33 @@ export function playAudioText(text, options = {}) {
   }
 
   try {
-    const utterance = new SpeechSynthesisUtterance(text.trim());
-    utterance.lang = options.lang || 'kn-IN';
-    utterance.rate = options.rate || 0.85;
-
-    // Search for a dedicated Kannada voice
-    const voices = window.speechSynthesis.getVoices() || [];
-    const kannadaVoice = voices.find(
-      (v) =>
-        (v.lang && (v.lang.toLowerCase().startsWith('kn') || v.lang.toLowerCase().includes('knda'))) ||
-        (v.name && v.name.toLowerCase().includes('kannada'))
-    );
-
-    if (kannadaVoice) {
-      utterance.voice = kannadaVoice;
+    // Chromium fix: If speech synthesis is paused, resume it
+    if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
     }
+
+    const utterance = new SpeechSynthesisUtterance(text.trim());
+    activeUtterance = utterance; // Prevent garbage collection in Chrome/Brave
+
+    const voices = window.speechSynthesis.getVoices() || [];
+    const bestVoice = findBestVoice(voices);
+
+    if (bestVoice) {
+      utterance.voice = bestVoice;
+      // If voice has specific lang, match utterance lang, otherwise use kn-IN
+      utterance.lang = bestVoice.lang || options.lang || 'kn-IN';
+    } else {
+      utterance.lang = options.lang || 'kn-IN';
+    }
+
+    utterance.rate = options.rate || 0.85;
 
     let isFinished = false;
     const cleanup = () => {
       if (!isFinished) {
         isFinished = true;
         currentAudioStopper = null;
+        activeUtterance = null;
         if (options.onEnd) options.onEnd();
       }
     };
@@ -193,7 +240,15 @@ export function playAudioText(text, options = {}) {
     };
 
     currentAudioStopper = stopper;
+
+    // Chromium fix: Small delay after cancel or direct speak
     window.speechSynthesis.speak(utterance);
+
+    // Chrome/Brave workaround for silent stalls on long or second utterance
+    if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+    }
+
     return stopper;
   } catch (err) {
     console.warn('SpeechSynthesis exception:', err);
@@ -208,9 +263,10 @@ export function playAudioText(text, options = {}) {
  *
  * @param {string} text - Phrase Kannada text
  * @param {string} [audioUrl] - Optional prerecorded audio file URL
+ * @param {number} [rate] - Speech playback rate
  * @returns {{ isPlaying: boolean, play: () => void, stop: () => void, error: string | null }}
  */
-export function usePhraseAudio(text, audioUrl) {
+export function usePhraseAudio(text, audioUrl, rate) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [error, setError] = useState(null);
 
@@ -239,6 +295,7 @@ export function usePhraseAudio(text, audioUrl) {
 
     playAudioText(text, {
       audioUrl,
+      rate,
       onStart: () => setIsPlaying(true),
       onEnd: () => setIsPlaying(false),
       onError: (err) => {

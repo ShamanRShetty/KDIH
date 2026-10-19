@@ -4,8 +4,8 @@ import dotenv from 'dotenv';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { getRelevantPhrasesForContext } from './phraseService.js';
-import { generatePhraseAssistance } from './groqService.js';
+import { getRelevantPhrasesForContext, loadDatabasePhrases } from './phraseService.js';
+import { generatePhraseAssistance, explainPhrase } from './groqService.js';
 
 // Resolve current directory for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -131,6 +131,107 @@ app.post('/api/phrase-assistant', async (req, res, next) => {
       suggestions: groqResult.suggestions,
       source: groqResult.source || 'groq',
     });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * Phrase Explanation Endpoint
+ * POST /api/explain-phrase
+ * Body: { "phraseId": "trans-001" }
+ */
+app.post('/api/explain-phrase', async (req, res, next) => {
+  try {
+    const { phraseId } = req.body || {};
+
+    if (phraseId === undefined || phraseId === null) {
+      return res.status(400).json({
+        success: false,
+        error: 'The "phraseId" field is required.',
+        code: 'MISSING_PHRASE_ID',
+      });
+    }
+
+    if (typeof phraseId !== 'string') {
+      return res.status(400).json({
+        success: false,
+        error: 'The "phraseId" field must be a string.',
+        code: 'INVALID_PHRASE_ID',
+      });
+    }
+
+    const trimmedId = phraseId.trim();
+    if (!trimmedId) {
+      return res.status(400).json({
+        success: false,
+        error: 'The "phraseId" field cannot be empty.',
+        code: 'MISSING_PHRASE_ID',
+      });
+    }
+
+    if (trimmedId.length > 50) {
+      return res.status(400).json({
+        success: false,
+        error: 'The "phraseId" exceeds maximum allowed length.',
+        code: 'INVALID_PHRASE_ID',
+      });
+    }
+
+    // Look up phrase in database
+    const allPhrases = loadDatabasePhrases();
+    const phrase = allPhrases.find((p) => p.id === trimmedId);
+
+    if (!phrase) {
+      return res.status(404).json({
+        success: false,
+        error: `Phrase with ID "${trimmedId}" was not found.`,
+        code: 'PHRASE_NOT_FOUND',
+      });
+    }
+
+    // Attempt Groq explanation; if Groq fails or key is missing, return stored usageContext fallback
+    try {
+      const explanation = await explainPhrase({ phrase, allPhrases });
+      return res.json({
+        success: true,
+        explanation,
+        source: 'groq',
+      });
+    } catch (groqErr) {
+      console.warn(`[Server] Groq explanation failed for ${trimmedId}, serving database fallback:`, groqErr.message);
+      // Fallback response using stored usageContext
+      const sameCategory = allPhrases.filter((p) => p.category === phrase.category && p.id !== phrase.id);
+      const similar = sameCategory.length > 0 ? {
+        id: sameCategory[0].id,
+        kannada: sameCategory[0].kannada,
+        transliteration: sameCategory[0].transliteration,
+        englishMeaning: sameCategory[0].englishMeaning,
+        category: sameCategory[0].category,
+      } : null;
+
+      return res.json({
+        success: true,
+        explanation: {
+          phraseId: phrase.id,
+          breakdown: [
+            {
+              kannada: phrase.kannada,
+              transliteration: phrase.transliteration,
+              meaning: phrase.englishMeaning,
+            },
+          ],
+          formality: {
+            level: 'polite',
+            note: phrase.usageContext || 'Used politely in everyday communication.',
+          },
+          similarPhrase: similar,
+          label: 'AI-generated — not yet verified',
+          isDatabaseVerified: false,
+        },
+        source: 'fallback',
+      });
+    }
   } catch (err) {
     next(err);
   }

@@ -8,6 +8,7 @@ import ExplorePage from './pages/ExplorePage';
 import SituationPage from './pages/SituationPage';
 import FavouritesPage from './pages/FavouritesPage';
 import SettingsPage from './pages/SettingsPage';
+import PracticePage from './pages/PracticePage';
 import { registerServiceWorker, applyServiceWorkerUpdate } from './utils/pwaUtils';
 import './styles/global.css';
 
@@ -43,6 +44,7 @@ export default function App() {
         <Route path="/explore" element={<ExplorePage />} />
         <Route path="/situation/:situationId" element={<SituationPage />} />
         <Route path="/favourites" element={<FavouritesPage />} />
+        <Route path="/practice" element={<PracticePage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route
           path="*"

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import AudioButton from './AudioButton';
 import './PhraseShowModal.css';
 
@@ -12,6 +12,7 @@ import './PhraseShowModal.css';
  * - High contrast font sizing that dynamically adapts to viewport.
  * - Prominent close button with 48px touch target.
  * - Integrated accessible AudioButton.
+ * - One-tap copy Kannada text with safe fallback and confirmation.
  *
  * @param {object} props
  * @param {object} props.phrase - Phrase data object
@@ -19,6 +20,7 @@ import './PhraseShowModal.css';
  */
 export default function PhraseShowModal({ phrase, onClose }) {
   const closeButtonRef = useRef(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     // Focus the close button on open
@@ -42,6 +44,30 @@ export default function PhraseShowModal({ phrase, onClose }) {
   const englishText = phrase.englishMeaning || phrase.english || '';
   const contextText = phrase.usageContext || phrase.context || '';
   const audioText = phrase.audioText || kannadaText;
+
+  const handleCopyKannada = async () => {
+    if (!kannadaText) return;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(kannadaText);
+      } else {
+        // Safe fallback for browsers without clipboard API
+        const textarea = document.createElement('textarea');
+        textarea.value = kannadaText;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Safe fallback
+      setCopied(false);
+    }
+  };
 
   return (
     <div
@@ -91,6 +117,22 @@ export default function PhraseShowModal({ phrase, onClose }) {
               {englishText}
             </p>
           )}
+
+          {/* Copy Kannada Text Button */}
+          <div className="phrase-modal-copy-wrap">
+            <button
+              type="button"
+              className={`btn btn-sm phrase-modal-copy-btn ${
+                copied ? 'phrase-modal-copy-btn--copied' : ''
+              }`}
+              onClick={handleCopyKannada}
+              aria-label={copied ? 'Kannada text copied to clipboard' : 'Copy Kannada text'}
+            >
+              <span aria-hidden="true">{copied ? '✓' : '📋'}</span>
+              <span>{copied ? 'Copied! / ನಕಲಿಸಲಾಗಿದೆ' : 'Copy Kannada text'}</span>
+            </button>
+          </div>
+
           {contextText && (
             <div className="phrase-modal-context">
               <strong>Context:</strong> {contextText}

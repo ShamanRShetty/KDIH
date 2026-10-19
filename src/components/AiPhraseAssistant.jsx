@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import PhraseCard from './PhraseCard';
 import { findMatchingPhrases } from '../utils/aiPhraseAssistant';
@@ -36,6 +36,98 @@ export default function AiPhraseAssistant({ isFavourite, onToggleFavourite }) {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [activeSource, setActiveSource] = useState(null); // 'groq' | 'offline-local'
+
+  // Voice SpeechRecognition State
+  const [isListening, setIsListening] = useState(false);
+  const [speechSupported] = useState(() => {
+    return typeof window !== 'undefined' &&
+      Boolean(window.SpeechRecognition || window.webkitSpeechRecognition);
+  });
+  const [speechError, setSpeechError] = useState(null);
+  const recognitionRef = useRef(null);
+
+  useEffect(() => {
+    const SpeechRecognition =
+      typeof window !== 'undefined' &&
+      (window.SpeechRecognition || window.webkitSpeechRecognition);
+
+    if (SpeechRecognition) {
+      try {
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'en-IN';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        recognition.onstart = () => {
+          setIsListening(true);
+          setSpeechError(null);
+        };
+
+        recognition.onresult = (event) => {
+          if (event.results && event.results[0] && event.results[0][0]) {
+            const transcript = event.results[0][0].transcript;
+            if (transcript) {
+              setQuery(transcript);
+            }
+          }
+          setIsListening(false);
+        };
+
+        recognition.onerror = (event) => {
+          setIsListening(false);
+          if (event.error === 'not-allowed') {
+            setSpeechError('Microphone permission was denied. You can continue typing your question.');
+          } else if (event.error === 'no-speech') {
+            setSpeechError('No speech was detected. Please try tapping the mic again.');
+          } else {
+            setSpeechError(`Voice input issue: ${event.error}. You can type directly.`);
+          }
+        };
+
+        recognition.onend = () => {
+          setIsListening(false);
+        };
+
+        recognitionRef.current = recognition;
+      } catch (err) {
+        console.warn('SpeechRecognition initialization error:', err);
+        setSpeechSupported(false);
+      }
+    } else {
+      setSpeechSupported(false);
+    }
+
+    return () => {
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.abort();
+        } catch {
+          // ignore
+        }
+      }
+    };
+  }, []);
+
+  const handleToggleVoiceInput = () => {
+    if (!recognitionRef.current) return;
+    setSpeechError(null);
+
+    if (isListening) {
+      try {
+        recognitionRef.current.stop();
+      } catch {
+        // ignore
+      }
+      setIsListening(false);
+    } else {
+      try {
+        recognitionRef.current.start();
+      } catch (err) {
+        console.warn('SpeechRecognition start failed:', err);
+        setSpeechError('Unable to start speech recognition. Please try typing instead.');
+      }
+    }
+  };
 
   const handleSearch = async (textToSearch, categoryOverride) => {
     const input = (textToSearch !== undefined ? textToSearch : query).trim();
@@ -217,13 +309,28 @@ export default function AiPhraseAssistant({ isFavourite, onToggleFavourite }) {
             id="ai-input"
             type="text"
             className="ai-assistant-input"
-            placeholder="e.g., How do I ask the conductor about bus fare?"
+            placeholder={isListening ? 'Listening (en-IN)... speak now' : 'e.g., How do I ask the conductor about bus fare?'}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             maxLength={500}
             disabled={isLoading}
             autoComplete="off"
           />
+
+          {/* Voice Input Mic Button */}
+          {speechSupported && (
+            <button
+              type="button"
+              className={`ai-assistant-mic-btn ${isListening ? 'ai-assistant-mic-btn--listening' : ''}`}
+              onClick={handleToggleVoiceInput}
+              disabled={isLoading}
+              aria-label={isListening ? 'Stop listening to voice input' : 'Speak your question in English (voice input)'}
+              title={isListening ? 'Stop listening' : 'Voice input (English)'}
+            >
+              <span aria-hidden="true">{isListening ? '⏹️' : '🎙️'}</span>
+            </button>
+          )}
+
           {query && !isLoading && (
             <button
               type="button"
@@ -251,6 +358,24 @@ export default function AiPhraseAssistant({ isFavourite, onToggleFavourite }) {
           )}
         </button>
       </form>
+
+      {/* Voice listening status indicator */}
+      {isListening && (
+        <div className="ai-listening-indicator" role="status">
+          <span className="ai-listening-pulse" aria-hidden="true"></span>
+          <span>Listening in English (en-IN)... Your spoken words will fill the box above. Confirm and tap &ldquo;Find Phrase&rdquo; when ready.</span>
+        </div>
+      )}
+
+      {/* Speech recognition error notice */}
+      {speechError && (
+        <div className="ai-warning-alert" role="status">
+          <span className="ai-warning-icon" aria-hidden="true">🎙️</span>
+          <div className="ai-warning-body">
+            <strong>Voice Input:</strong> {speechError}
+          </div>
+        </div>
+      )}
 
       {/* Backend / Network error notice if any */}
       {errorMessage && (

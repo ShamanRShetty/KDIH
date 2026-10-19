@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import request from 'supertest';
 import app from '../server.js';
-import { validateAndSanitizeLlmOutput } from '../groqService.js';
+import { validateAndSanitizeLlmOutput, validateAndSanitizeExplanation } from '../groqService.js';
 import { getRelevantPhrasesForContext } from '../phraseService.js';
 
 test('Backend Health check endpoint', async () => {
@@ -138,4 +138,92 @@ test('Backend Output Sanitizer: Preserves exact database phrases and marks gener
   assert.strictEqual(genMatch.isDatabaseVerified, false);
   assert.strictEqual(genMatch.verificationLabel, 'AI-generated — not yet verified');
   assert.strictEqual(genMatch.verificationStatus, 'needs_review');
+});
+
+test('Backend Validation /api/explain-phrase: Rejects missing phraseId with 400', async () => {
+  const res1 = await request(app)
+    .post('/api/explain-phrase')
+    .send({});
+  assert.strictEqual(res1.status, 400);
+  assert.strictEqual(res1.body.code, 'MISSING_PHRASE_ID');
+
+  const res2 = await request(app)
+    .post('/api/explain-phrase')
+    .send({ phraseId: '' });
+  assert.strictEqual(res2.status, 400);
+  assert.strictEqual(res2.body.code, 'MISSING_PHRASE_ID');
+});
+
+test('Backend Validation /api/explain-phrase: Rejects oversized or non-string phraseId with 400', async () => {
+  const res1 = await request(app)
+    .post('/api/explain-phrase')
+    .send({ phraseId: 12345 });
+  assert.strictEqual(res1.status, 400);
+  assert.strictEqual(res1.body.code, 'INVALID_PHRASE_ID');
+
+  const longId = 'a'.repeat(51);
+  const res2 = await request(app)
+    .post('/api/explain-phrase')
+    .send({ phraseId: longId });
+  assert.strictEqual(res2.status, 400);
+  assert.strictEqual(res2.body.code, 'INVALID_PHRASE_ID');
+});
+
+test('Backend Validation /api/explain-phrase: Rejects unknown phraseId with 404', async () => {
+  const res = await request(app)
+    .post('/api/explain-phrase')
+    .send({ phraseId: 'non-existent-phrase-id-999' });
+  assert.strictEqual(res.status, 404);
+  assert.strictEqual(res.body.code, 'PHRASE_NOT_FOUND');
+});
+
+test('Backend Explanation Sanitizer: Handles malformed Groq output with graceful fallbacks', () => {
+  const phrase = {
+    id: 'trans-001',
+    category: 'transportation',
+    kannada: 'ಈ ಬಸ್ ಮೆಜೆಸ್ಟಿಕ್‌ಗೆ ಹೋಗುತ್ತಾ?',
+    transliteration: 'Ee bus Majestic-ge hogutta?',
+    englishMeaning: 'Does this bus go to Majestic?',
+    usageContext: 'Asking the conductor or passengers',
+  };
+
+  const allPhrases = [
+    phrase,
+    {
+      id: 'trans-002',
+      category: 'transportation',
+      kannada: 'ಮೆಜೆಸ್ಟಿಕ್ ಬಸ್ ಎಲ್ಲಿ ಹತ್ತಬೇಕು?',
+      transliteration: 'Majestic bus elli hattabeku?',
+      englishMeaning: 'Where should I board the Majestic bus?',
+    },
+  ];
+
+  // Completely empty or broken output fields
+  const malformedLlmOutput = {
+    breakdown: 'not an array',
+    formality: null,
+    similarPhrase: { id: 'unknown-fake-id' },
+  };
+
+  const result = validateAndSanitizeExplanation(malformedLlmOutput, phrase, allPhrases);
+
+  // Must recover with valid word breakdown, formality note, and database similar phrase
+  assert.strictEqual(result.phraseId, 'trans-001');
+  assert.ok(Array.isArray(result.breakdown));
+  assert.strictEqual(result.breakdown.length, 1);
+  assert.strictEqual(result.breakdown[0].kannada, phrase.kannada);
+  assert.strictEqual(result.formality.level, 'polite');
+  assert.strictEqual(result.similarPhrase.id, 'trans-002');
+  assert.strictEqual(result.label, 'AI-generated — not yet verified');
+  assert.strictEqual(result.isDatabaseVerified, false);
+});
+
+test('Backend Rate Limiting: Applies to /api/explain-phrase route', async () => {
+  // Fire requests until rate limit is triggered or verify headers exist
+  const res = await request(app)
+    .post('/api/explain-phrase')
+    .send({ phraseId: 'trans-001' });
+
+  // Verify rate limit headers are present on /api/ routes
+  assert.ok(res.headers['ratelimit-limit'] || res.headers['x-ratelimit-limit']);
 });

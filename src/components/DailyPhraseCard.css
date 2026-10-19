@@ -1,0 +1,96 @@
+.daily-phrase-card {
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-primary-surface) 100%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  margin-top: var(--space-xl);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.daily-phrase-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.daily-phrase-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.daily-streak-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #fff3e0;
+  color: #d35400;
+  border: 1px solid #ffe0b2;
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.daily-streak-flame {
+  font-size: var(--text-sm);
+}
+
+.daily-phrase-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.daily-phrase-kannada {
+  font-family: var(--font-kannada);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--color-primary);
+  line-height: 1.4;
+}
+
+.daily-phrase-transliteration {
+  font-size: var(--text-base);
+  color: var(--color-teal);
+  font-weight: var(--font-medium);
+}
+
+.daily-phrase-english {
+  font-size: var(--text-base);
+  color: var(--color-text);
+  font-weight: var(--font-semibold);
+}
+
+.daily-phrase-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-md);
+  padding-top: var(--space-sm);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.daily-phrase-practice-link {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--color-primary);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.daily-phrase-practice-link:hover {
+  text-decoration: underline;
+}

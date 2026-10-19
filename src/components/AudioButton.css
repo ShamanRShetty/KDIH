@@ -1,3 +1,9 @@
+.audio-btn-group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
 .audio-btn {
   display: inline-flex;
   align-items: center;
@@ -13,6 +19,21 @@
   /* Minimum recommended touch target */
   min-width: 44px;
   min-height: 44px;
+}
+
+.audio-btn--slow {
+  gap: 2px;
+  font-size: var(--text-xs);
+  padding: 0 6px;
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+}
+
+.audio-btn-slow-label {
+  font-size: 10px;
+  font-weight: var(--font-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .audio-btn--sm {

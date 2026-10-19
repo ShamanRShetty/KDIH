@@ -256,3 +256,214 @@ Respond with the required JSON object.`;
     source: 'groq',
   };
 }
+
+/**
+ * Validates and sanitizes the explanation output from Groq.
+ *
+ * @param {any} parsedData
+ * @param {object} phrase - Original phrase from DB
+ * @param {Array<object>} allPhrases - Full phrases DB for similar phrase verification
+ * @returns {object}
+ */
+export function validateAndSanitizeExplanation(parsedData, phrase, allPhrases = []) {
+  if (!parsedData || typeof parsedData !== 'object') {
+    throw new Error('Explanation output is not a valid JSON object');
+  }
+
+  // 1. Word-by-word breakdown
+  let breakdown = [];
+  if (Array.isArray(parsedData.breakdown)) {
+    for (const item of parsedData.breakdown) {
+      if (item && typeof item === 'object') {
+        const kannada = typeof item.kannada === 'string' ? item.kannada.trim() : '';
+        const transliteration = typeof item.transliteration === 'string' ? item.transliteration.trim() : '';
+        const meaning = typeof item.meaning === 'string' ? item.meaning.trim() : '';
+        if (kannada || transliteration || meaning) {
+          breakdown.push({ kannada, transliteration, meaning });
+        }
+      }
+    }
+  }
+
+  // Fallback breakdown if none was parsed
+  if (breakdown.length === 0) {
+    breakdown = [
+      {
+        kannada: phrase.kannada,
+        transliteration: phrase.transliteration,
+        meaning: phrase.englishMeaning,
+      },
+    ];
+  }
+
+  // 2. Formality note
+  let formality = {
+    level: 'polite',
+    note: phrase.usageContext || 'Used politely in everyday communication.',
+  };
+  if (parsedData.formality && typeof parsedData.formality === 'object') {
+    const level = parsedData.formality.level === 'casual' ? 'casual' : 'polite';
+    const note = typeof parsedData.formality.note === 'string' && parsedData.formality.note.trim()
+      ? parsedData.formality.note.trim()
+      : (phrase.usageContext || 'Polite everyday usage');
+    formality = { level, note };
+  }
+
+  // 3. Similar phrase from database
+  let similarPhrase = null;
+  const dbPhrases = allPhrases && allPhrases.length > 0 ? allPhrases : loadDatabasePhrases();
+  const dbMap = new Map();
+  dbPhrases.forEach((p) => dbMap.set(p.id, p));
+
+  if (parsedData.similarPhrase && parsedData.similarPhrase.id && dbMap.has(parsedData.similarPhrase.id)) {
+    const match = dbMap.get(parsedData.similarPhrase.id);
+    similarPhrase = {
+      id: match.id,
+      kannada: match.kannada,
+      transliteration: match.transliteration,
+      englishMeaning: match.englishMeaning,
+      category: match.category,
+    };
+  } else {
+    // Pick another phrase from the same category
+    const sameCategory = dbPhrases.filter((p) => p.category === phrase.category && p.id !== phrase.id);
+    if (sameCategory.length > 0) {
+      const fallback = sameCategory[0];
+      similarPhrase = {
+        id: fallback.id,
+        kannada: fallback.kannada,
+        transliteration: fallback.transliteration,
+        englishMeaning: fallback.englishMeaning,
+        category: fallback.category,
+      };
+    }
+  }
+
+  return {
+    phraseId: phrase.id,
+    breakdown,
+    formality,
+    similarPhrase,
+    label: 'AI-generated — not yet verified',
+    isDatabaseVerified: false,
+  };
+}
+
+const EXPLAIN_SYSTEM_INSTRUCTION = `You are an expert Kannada language teacher helping beginners understand Kannada phrases.
+For a given Kannada phrase, provide:
+1. word-by-word breakdown (each Kannada word, its transliteration, and English meaning).
+2. formality note ("casual" vs "polite", with a concise 1-sentence explanation of why/when).
+3. one similar phrase from the provided SIMILAR DATABASE CANDIDATES (must use candidate's exact id, kannada, and englishMeaning).
+
+Output format:
+Respond ONLY with a valid JSON object matching this schema:
+{
+  "breakdown": [
+    { "kannada": "...", "transliteration": "...", "meaning": "..." }
+  ],
+  "formality": {
+    "level": "casual" | "polite",
+    "note": "..."
+  },
+  "similarPhrase": {
+    "id": "candidate-id-from-list",
+    "kannada": "...",
+    "englishMeaning": "..."
+  }
+}
+Do NOT include markdown formatting or extra text outside JSON.`;
+
+/**
+ * Calls Groq to explain a specific database phrase.
+ *
+ * @param {object} params
+ * @param {object} params.phrase
+ * @param {Array<object>} [params.allPhrases]
+ * @param {object} [params.groqClient]
+ * @returns {Promise<object>}
+ */
+export async function explainPhrase({ phrase, allPhrases = [], groqClient = null }) {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey || !apiKey.trim() || apiKey === 'your_groq_api_key_here') {
+    const error = new Error('GROQ_API_KEY is not configured on the backend server.');
+    error.status = 503;
+    error.code = 'CONFIG_MISSING_API_KEY';
+    throw error;
+  }
+
+  const model = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+  const client = groqClient || new Groq({ apiKey: apiKey.trim() });
+
+  const dbPhrases = allPhrases && allPhrases.length > 0 ? allPhrases : loadDatabasePhrases();
+  const categoryCandidates = dbPhrases
+    .filter((p) => p.category === phrase.category && p.id !== phrase.id)
+    .slice(0, 5)
+    .map((p) => ({
+      id: p.id,
+      kannada: p.kannada,
+      transliteration: p.transliteration,
+      englishMeaning: p.englishMeaning,
+    }));
+
+  const userPrompt = `PHRASE TO EXPLAIN:
+ID: ${phrase.id}
+Kannada: "${phrase.kannada}"
+Transliteration: "${phrase.transliteration}"
+English Meaning: "${phrase.englishMeaning}"
+Usage Context: "${phrase.usageContext || ''}"
+
+SIMILAR DATABASE CANDIDATES (choose one):
+${JSON.stringify(categoryCandidates, null, 2)}
+
+Provide the word-by-word breakdown, formality note, and selected similar phrase JSON.`;
+
+  let completion;
+  try {
+    completion = await client.chat.completions.create({
+      model,
+      temperature: 0.1,
+      max_tokens: 500,
+      response_format: { type: 'json_object' },
+      messages: [
+        { role: 'system', content: EXPLAIN_SYSTEM_INSTRUCTION },
+        { role: 'user', content: userPrompt },
+      ],
+    });
+  } catch (apiErr) {
+    console.error('[GroqService] Groq API call for explainPhrase failed:', apiErr.message || apiErr);
+    const status = apiErr.status || 502;
+    const err = new Error(
+      apiErr.status === 401
+        ? 'Invalid or unauthorized GROQ_API_KEY.'
+        : apiErr.status === 429
+        ? 'Groq API rate limit exceeded.'
+        : 'The Groq language service is temporarily unavailable.'
+    );
+    err.status = status;
+    err.code = apiErr.status === 401 ? 'GROQ_AUTH_ERROR' : apiErr.status === 429 ? 'GROQ_RATE_LIMIT' : 'GROQ_API_ERROR';
+    throw err;
+  }
+
+  const choice = completion?.choices?.[0];
+  const rawContent = choice?.message?.content;
+
+  if (!rawContent || !rawContent.trim()) {
+    const err = new Error('Received empty response from the Groq language model.');
+    err.status = 502;
+    err.code = 'GROQ_EMPTY_RESPONSE';
+    throw err;
+  }
+
+  let parsed;
+  try {
+    parsed = JSON.parse(rawContent);
+  } catch (jsonErr) {
+    console.error('[GroqService] Failed to parse explanation as JSON:', jsonErr.message, rawContent);
+    const err = new Error('The language model response could not be parsed as valid JSON.');
+    err.status = 502;
+    err.code = 'GROQ_MALFORMED_OUTPUT';
+    throw err;
+  }
+
+  return validateAndSanitizeExplanation(parsed, phrase, dbPhrases);
+}

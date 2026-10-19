@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import SituationCard from '../components/SituationCard';
+import DailyPhraseCard from '../components/DailyPhraseCard';
 import situations from '../data/situations';
 import './HomePage.css';
 
@@ -18,9 +19,17 @@ export default function HomePage() {
             helps you communicate in everyday Kannada through practical,
             situation-based phrases — no prior knowledge needed.
           </p>
-          <Link to="/explore" className="btn btn-primary btn-lg hero-cta">
-            Start Exploring Phrases
-          </Link>
+          <div className="hero-actions">
+            <Link to="/explore" className="btn btn-primary btn-lg hero-cta">
+              Start Exploring Phrases
+            </Link>
+            <Link to="/practice" className="btn btn-secondary btn-lg hero-cta">
+              🎯 Practice Mode
+            </Link>
+          </div>
+
+          {/* Phrase of the Day & Streak Card */}
+          <DailyPhraseCard />
         </section>
 
         {/* Situation Cards */}

@@ -4,6 +4,7 @@ import './BottomNav.css';
 const navItems = [
   { to: '/', label: 'Home', icon: '🏠' },
   { to: '/explore', label: 'Explore', icon: '📖' },
+  { to: '/practice', label: 'Practice', icon: '🎯' },
   { to: '/favourites', label: 'Favourites', icon: '⭐' },
   { to: '/settings', label: 'Settings', icon: '⚙️' },
 ];

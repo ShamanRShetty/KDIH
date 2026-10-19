@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import PhraseCard from '../components/PhraseCard';
 import GuidedConversation from '../components/GuidedConversation';
+import NumbersReference from '../components/NumbersReference';
 import useFavourites from '../hooks/useFavourites';
 import situations from '../data/situations';
 import { getPhrasesByCategory, getSubcategories } from '../utils/phraseUtils';
@@ -234,6 +235,9 @@ export default function SituationPage() {
                 ))}
               </div>
             )}
+
+            {/* Numbers & Money Reference for Shopping Situation */}
+            {situationId === 'shopping' && <NumbersReference />}
           </div>
         )}
 

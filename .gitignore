@@ -7,9 +7,17 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
+.pnp
+.pnp.js
+
+# Production / Build output
 dist
 dist-ssr
+build
+
+# Local environment & secrets
 *.local
 .env
 .env.*
@@ -17,13 +25,29 @@ backend/.env
 backend/.env.*
 !backend/.env.example
 
-# Editor directories and files
+# IDE & Editor files
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+*.swo
+
+# OS metadata & temporary files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# Test coverage & tooling cache
+coverage
+.nyc_output
+.eslintcache
+.stylelintcache
+.turbo
+.parcel-cache

@@ -40,6 +40,24 @@ const situations = [
     color: '#8b6914',
     phraseCount: 0,
   },
+  {
+    id: 'emergency',
+    title: 'Emergency',
+    titleKannada: 'ತುರ್ತು ಪರಿಸ್ಥಿತಿ',
+    description: 'Police, ambulance, lost, and asking for urgent help',
+    icon: '🚨',
+    color: '#c0392b',
+    phraseCount: 0,
+  },
+  {
+    id: 'food',
+    title: 'Food & Dining',
+    titleKannada: 'ಊಟ ಮತ್ತು ಉಪಹಾರ',
+    description: 'Restaurants, ordering food, bill, and dietary preferences',
+    icon: '🍛',
+    color: '#d35400',
+    phraseCount: 0,
+  },
 ];
 
 export default situations;
