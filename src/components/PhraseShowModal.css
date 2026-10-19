@@ -136,7 +136,7 @@
 }
 
 .phrase-modal-copy-btn:hover {
-  background-color: #d8e8f5;
+  background-color: var(--color-primary-surface-hover);
 }
 
 .phrase-modal-copy-btn--copied {

@@ -46,7 +46,7 @@ const situations = [
     titleKannada: 'ತುರ್ತು ಪರಿಸ್ಥಿತಿ',
     description: 'Police, ambulance, lost, and asking for urgent help',
     icon: '🚨',
-    color: '#c0392b',
+    color: '#b44b4b',
     phraseCount: 0,
   },
   {
@@ -55,7 +55,7 @@ const situations = [
     titleKannada: 'ಊಟ ಮತ್ತು ಉಪಹಾರ',
     description: 'Restaurants, ordering food, bill, and dietary preferences',
     icon: '🍛',
-    color: '#d35400',
+    color: '#8b6914',
     phraseCount: 0,
   },
 ];
