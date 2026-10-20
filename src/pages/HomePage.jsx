@@ -11,13 +11,22 @@ export default function HomePage() {
         {/* Deliberate Hero Section */}
         <section className="hero" aria-labelledby="hero-title">
           <div className="hero-content">
-            <span className="hero-kicker">Karnataka Civic & Transit Companion</span>
+            <div className="hero-brand-pill">
+              <img
+                src="/logo.png"
+                alt="NammaSahaaya logo"
+                className="hero-logo-img"
+                width="24"
+                height="24"
+              />
+              <span className="hero-kicker">NammaSahaaya • Karnataka Civic Companion</span>
+            </div>
             <h1 id="hero-title" className="hero-title">
               Everyday Kannada communication, structured for real situations.
             </h1>
             <p className="hero-description">
               Designed for residents, students, and visitors. Access verified phrases for transit,
-              markets, clinics, and directions — with native Kannada Unicode, phonetic transliteration,
+              markets, clinics, and directions - with native Kannada Unicode, phonetic transliteration,
               and offline speech audio.
             </p>
             <div className="hero-actions">

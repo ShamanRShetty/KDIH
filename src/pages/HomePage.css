@@ -9,18 +9,29 @@
   margin: 0 auto;
 }
 
-.hero-kicker {
-  display: inline-block;
-  font-size: var(--text-xs);
-  font-weight: var(--font-semibold);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--color-primary);
+.hero-brand-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
   background-color: var(--color-primary-surface);
-  border: 1px solid rgba(15, 76, 117, 0.15);
-  padding: 4px 12px;
+  border: 1px solid rgba(15, 76, 117, 0.18);
+  padding: 4px 14px 4px 6px;
   border-radius: var(--radius-full);
   margin-bottom: var(--space-md);
+}
+
+.hero-logo-img {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+.hero-kicker {
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  letter-spacing: 0.04em;
+  color: var(--color-primary);
 }
 
 .hero-title {
