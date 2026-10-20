@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import AudioButton from './AudioButton';
+import { CopyIcon, CheckIcon } from './Icons';
 import './PhraseShowModal.css';
 
 /**
@@ -84,7 +85,7 @@ export default function PhraseShowModal({ phrase, onClose }) {
         <header className="phrase-modal-header">
           <div className="phrase-modal-badge-wrap">
             <span className="phrase-modal-badge">
-              Show to Person / ಬೇರೆಯವರಿಗೆ ತೋರಿಸಿ
+              Direct Display / ತೋರಿಸಿ
             </span>
           </div>
           <button
@@ -128,8 +129,8 @@ export default function PhraseShowModal({ phrase, onClose }) {
               onClick={handleCopyKannada}
               aria-label={copied ? 'Kannada text copied to clipboard' : 'Copy Kannada text'}
             >
-              <span aria-hidden="true">{copied ? '✓' : '📋'}</span>
-              <span>{copied ? 'Copied! / ನಕಲಿಸಲಾಗಿದೆ' : 'Copy Kannada text'}</span>
+              <span aria-hidden="true">{copied ? <CheckIcon size={14} /> : <CopyIcon size={14} />}</span>
+              <span>{copied ? 'Copied' : 'Copy Kannada'}</span>
             </button>
           </div>
 

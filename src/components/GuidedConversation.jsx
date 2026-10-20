@@ -57,7 +57,7 @@ export default function GuidedConversation({
       {/* Header */}
       <div className="guided-conv-header">
         <div className="guided-conv-title-wrap">
-          <span className="guided-conv-badge">💬 Guided Practice</span>
+          <span className="guided-conv-badge">Guided Practice</span>
           <h2 className="guided-conv-title">{conversation.title}</h2>
           {conversation.titleKannada && (
             <p className="guided-conv-kannada kannada-text">{conversation.titleKannada}</p>
@@ -70,7 +70,7 @@ export default function GuidedConversation({
               onClick={handleBackStep}
               title="Previous step"
             >
-              ← Back Step
+              ← Back
             </button>
           )}
           <button
@@ -78,7 +78,7 @@ export default function GuidedConversation({
             onClick={handleRestart}
             title="Restart from beginning"
           >
-            🔄 Restart
+            Restart
           </button>
           {onExit && (
             <button
@@ -86,7 +86,7 @@ export default function GuidedConversation({
               onClick={onExit}
               title="Exit conversation"
             >
-              ✕ Close
+              Close
             </button>
           )}
         </div>
@@ -113,7 +113,7 @@ export default function GuidedConversation({
       {/* Phrase to Say */}
       {phrase && (
         <div className="guided-conv-phrase-section">
-          <p className="guided-conv-section-label">Say this phrase:</p>
+          <p className="guided-conv-section-label">Suggested phrase:</p>
           <PhraseCard
             phrase={phrase}
             isFavourite={isFavourite ? isFavourite(phrase.id) : false}
@@ -126,10 +126,7 @@ export default function GuidedConversation({
       {!isFinalStep ? (
         <div className="guided-conv-responses-section">
           <p className="guided-conv-section-label">
-            What did the other person say or what happened?
-          </p>
-          <p className="guided-conv-note">
-            <em>Select the option below that best matches the response you received:</em>
+            Select the response you received:
           </p>
           <div className="guided-conv-options-list">
             {currentStep.responses.map((resp) => (
@@ -138,7 +135,7 @@ export default function GuidedConversation({
                 className="guided-conv-option-btn"
                 onClick={() => handleSelectResponse(resp.nextStepId)}
               >
-                <span className="guided-conv-option-icon">👉</span>
+                <span className="guided-conv-option-bullet">•</span>
                 <span className="guided-conv-option-text">{resp.heardText}</span>
               </button>
             ))}
@@ -146,17 +143,17 @@ export default function GuidedConversation({
         </div>
       ) : (
         <div className="guided-conv-completion">
-          <div className="guided-conv-completion-badge">🎉 Interaction Complete</div>
+          <div className="guided-conv-completion-badge">Interaction Complete</div>
           <p className="guided-conv-completion-msg">
-            {currentStep.completionMessage || 'Great job! You have completed this conversation flow.'}
+            {currentStep.completionMessage || 'You have successfully completed this communication scenario.'}
           </p>
           <div className="guided-conv-completion-actions">
             <button className="btn btn-primary" onClick={handleRestart}>
-              Practice Again
+              Practice Scenario Again
             </button>
             {onExit && (
               <button className="btn btn-secondary" onClick={onExit}>
-                Back to Category
+                Back to Scenario List
               </button>
             )}
           </div>

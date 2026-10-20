@@ -5,6 +5,7 @@ import AiPhraseAssistant from '../components/AiPhraseAssistant';
 import useFavourites from '../hooks/useFavourites';
 import situations from '../data/situations';
 import { getAllPhrases } from '../utils/phraseUtils';
+import { SituationIcon, SearchIcon } from '../components/Icons';
 import './ExplorePage.css';
 
 export default function ExplorePage() {
@@ -103,7 +104,10 @@ export default function ExplorePage() {
               className={`explore-chip ${selectedCategory === sit.id ? 'explore-chip--active' : ''}`}
               onClick={() => setSelectedCategory(sit.id)}
             >
-              {sit.icon} {sit.title}
+              <span className="explore-chip-icon" aria-hidden="true">
+                <SituationIcon situationId={sit.id} size={14} />
+              </span>
+              <span>{sit.title}</span>
             </button>
           ))}
         </div>
@@ -132,10 +136,12 @@ export default function ExplorePage() {
 
             {searchResults.length === 0 ? (
               <div className="empty-state">
-                <span className="empty-state-icon">🔍</span>
+                <span className="empty-state-icon" aria-hidden="true">
+                  <SearchIcon size={32} />
+                </span>
                 <p className="empty-state-title">No matching phrases</p>
                 <p className="empty-state-description">
-                  Try checking your spelling, using simpler words, or switching category filters.
+                  Check your spelling, try simpler keywords, or clear category filters.
                 </p>
                 <button
                   className="btn btn-primary"

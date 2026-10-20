@@ -8,38 +8,42 @@ export default function HomePage() {
   return (
     <main className="page home-page">
       <div className="container">
-        {/* Hero Section */}
+        {/* Deliberate Hero Section */}
         <section className="hero" aria-labelledby="hero-title">
-          <h1 id="hero-title" className="hero-title">
-            Speak Kannada with confidence,<br />
-            <span className="hero-highlight">wherever you go.</span>
-          </h1>
-          <p className="hero-description">
-            Moving to Karnataka or visiting for the first time? NammaSahaaya
-            helps you communicate in everyday Kannada through practical,
-            situation-based phrases — no prior knowledge needed.
-          </p>
-          <div className="hero-actions">
-            <Link to="/explore" className="btn btn-primary btn-lg hero-cta">
-              Start Exploring Phrases
-            </Link>
-            <Link to="/practice" className="btn btn-secondary btn-lg hero-cta">
-              🎯 Practice Mode
-            </Link>
+          <div className="hero-content">
+            <span className="hero-kicker">Karnataka Civic & Transit Companion</span>
+            <h1 id="hero-title" className="hero-title">
+              Everyday Kannada communication, structured for real situations.
+            </h1>
+            <p className="hero-description">
+              Designed for residents, students, and visitors. Access verified phrases for transit,
+              markets, clinics, and directions — with native Kannada Unicode, phonetic transliteration,
+              and offline speech audio.
+            </p>
+            <div className="hero-actions">
+              <Link to="/explore" className="btn btn-primary btn-lg hero-cta">
+                Browse Everyday Phrases
+              </Link>
+              <Link to="/practice" className="btn btn-secondary btn-lg hero-cta">
+                Practice Flashcards
+              </Link>
+            </div>
           </div>
 
           {/* Phrase of the Day & Streak Card */}
           <DailyPhraseCard />
         </section>
 
-        {/* Situation Cards */}
+        {/* Situation Categories */}
         <section className="home-situations" aria-labelledby="situations-heading">
-          <h2 id="situations-heading" className="section-heading">
-            Choose a Situation
-          </h2>
-          <p className="section-subheading">
-            Select a real-life scenario to find the phrases you need.
-          </p>
+          <div className="section-header">
+            <h2 id="situations-heading" className="section-heading">
+              Select a Communication Scenario
+            </h2>
+            <p className="section-subheading">
+              Curated phrase groups with Kannada script, pronunciation guides, and interactive dialogue flows.
+            </p>
+          </div>
           <div className="situations-grid">
             {situations.map((situation) => (
               <SituationCard key={situation.id} situation={situation} />
@@ -47,62 +51,86 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* How It Works */}
+        {/* Product Utility Architecture */}
         <section className="home-how-it-works" aria-labelledby="how-heading">
-          <h2 id="how-heading" className="section-heading">
-            How It Works
-          </h2>
+          <div className="section-header">
+            <h2 id="how-heading" className="section-heading">
+              How NammaSahaaya Works
+            </h2>
+            <p className="section-subheading">
+              Designed for immediate utility in outdoor, low-bandwidth, and offline environments.
+            </p>
+          </div>
           <div className="how-steps">
             <div className="how-step">
-              <span className="how-step-number" aria-hidden="true">1</span>
-              <h3 className="how-step-title">Pick a Situation</h3>
-              <p className="how-step-text">
-                Choose from real-life scenarios like taking a bus, shopping at a
-                market, or visiting a hospital.
-              </p>
+              <span className="how-step-index">01</span>
+              <div className="how-step-body">
+                <h3 className="how-step-title">Tri-Tier Reading Hierarchy</h3>
+                <p className="how-step-text">
+                  Every phrase provides native Kannada Unicode, italicized English transliteration for pronunciation,
+                  and exact English meaning on a single card.
+                </p>
+              </div>
             </div>
             <div className="how-step">
-              <span className="how-step-number" aria-hidden="true">2</span>
-              <h3 className="how-step-title">Learn the Phrases</h3>
-              <p className="how-step-text">
-                See each phrase in Kannada script, English transliteration, and
-                English meaning — all on one card.
-              </p>
+              <span className="how-step-index">02</span>
+              <div className="how-step-body">
+                <h3 className="how-step-title">One-Tap Show to Person</h3>
+                <p className="how-step-text">
+                  In loud markets or crowded buses, open the high-contrast full-screen view and show the Kannada text
+                  directly to conductors or shopkeepers.
+                </p>
+              </div>
             </div>
             <div className="how-step">
-              <span className="how-step-number" aria-hidden="true">3</span>
-              <h3 className="how-step-title">Use with Confidence</h3>
-              <p className="how-step-text">
-                Save your favourite phrases for quick access and use them when
-                you need them most.
-              </p>
+              <span className="how-step-index">03</span>
+              <div className="how-step-body">
+                <h3 className="how-step-title">100% Offline Capability</h3>
+                <p className="how-step-text">
+                  The entire phrasebook, search index, and 3-box Leitner practice flashcards are cached in the browser
+                  and function without cellular network.
+                </p>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Who is this for */}
+        {/* Practical Audience & Context */}
         <section className="home-audience" aria-labelledby="audience-heading">
-          <h2 id="audience-heading" className="section-heading">
-            Who Is This For?
-          </h2>
-          <ul className="audience-list">
-            <li className="audience-item">
-              <span className="audience-icon" aria-hidden="true">🎓</span>
-              <span>Students moving to Karnataka for education</span>
-            </li>
-            <li className="audience-item">
-              <span className="audience-icon" aria-hidden="true">✈️</span>
-              <span>Visitors and tourists exploring the state</span>
-            </li>
-            <li className="audience-item">
-              <span className="audience-icon" aria-hidden="true">👷</span>
-              <span>Migrant workers and new employees</span>
-            </li>
-            <li className="audience-item">
-              <span className="audience-icon" aria-hidden="true">🏠</span>
-              <span>Residents who understand little Kannada</span>
-            </li>
-          </ul>
+          <div className="section-header">
+            <h2 id="audience-heading" className="section-heading">
+              Built for Everyday Urban Needs
+            </h2>
+            <p className="section-subheading">
+              Tailored specifically to remove language friction across common public touchpoints.
+            </p>
+          </div>
+          <div className="audience-grid">
+            <div className="audience-item">
+              <h3 className="audience-title">Commuters & Bus Transit</h3>
+              <p className="audience-desc">
+                Inquire about bus routes, boarding points, ticket stops, and change requests on BMTC or KSRTC buses.
+              </p>
+            </div>
+            <div className="audience-item">
+              <h3 className="audience-title">Local Markets & Street Vendors</h3>
+              <p className="audience-desc">
+                Ask prices per kilogram, confirm UPI payments, request discounts, and negotiate politely.
+              </p>
+            </div>
+            <div className="audience-item">
+              <h3 className="audience-title">Clinics & Medical Reception</h3>
+              <p className="audience-desc">
+                Register as a patient, describe common symptoms, and ask for doctor timings or prescription counters.
+              </p>
+            </div>
+            <div className="audience-item">
+              <h3 className="audience-title">Pedestrian Wayfinding</h3>
+              <p className="audience-desc">
+                Ask for directions, landmarks, metro stations, auto-rickshaw fares, and polite clarifications.
+              </p>
+            </div>
+          </div>
         </section>
       </div>
     </main>

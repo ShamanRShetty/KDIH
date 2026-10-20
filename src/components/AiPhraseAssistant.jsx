@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import PhraseCard from './PhraseCard';
 import { findMatchingPhrases } from '../utils/aiPhraseAssistant';
+import { MicIcon, SearchIcon, AlertCircleIcon } from './Icons';
 import './AiPhraseAssistant.css';
 
 const SAMPLE_PROMPTS = [
@@ -13,10 +14,10 @@ const SAMPLE_PROMPTS = [
 
 const CATEGORIES = [
   { value: '', label: 'All Situations' },
-  { value: 'transportation', label: '🚌 Transportation' },
-  { value: 'shopping', label: '🛍️ Shopping' },
-  { value: 'healthcare', label: '🏥 Healthcare' },
-  { value: 'directions', label: '📍 Directions' },
+  { value: 'transportation', label: 'Transportation' },
+  { value: 'shopping', label: 'Shopping' },
+  { value: 'healthcare', label: 'Healthcare' },
+  { value: 'directions', label: 'Directions' },
 ];
 
 /**
@@ -260,17 +261,17 @@ export default function AiPhraseAssistant({ isFavourite, onToggleFavourite }) {
     <section className="ai-assistant card" aria-labelledby="ai-assistant-title">
       <div className="ai-assistant-header">
         <div className="ai-assistant-badge-wrap">
-          <span className="ai-assistant-badge">⚡ Groq LLM Assistant</span>
+          <span className="ai-assistant-badge">Assistant</span>
           <span className="ai-assistant-tag">
-            {activeSource === 'groq' ? '🟢 Live Groq AI' : '✓ Database-Backed'}
+            {activeSource === 'groq' ? 'Live Groq Engine' : 'Local Phrasebook'}
           </span>
         </div>
         <h2 id="ai-assistant-title" className="ai-assistant-title">
           Describe what you need to say in English
         </h2>
         <p className="ai-assistant-desc">
-          Describe any communication situation in everyday English (e.g., <em>"I want to ask if UPI is accepted"</em>).
-          Powered by <strong>Groq Chat Completions</strong> and connected to our verified Kannada phrase database.
+          Enter any everyday question or request (e.g. <em>&ldquo;I want to ask if UPI is accepted&rdquo;</em>).
+          Matched with verified Kannada phrases and supported by Groq language processing.
         </p>
       </div>
 
@@ -327,7 +328,11 @@ export default function AiPhraseAssistant({ isFavourite, onToggleFavourite }) {
               aria-label={isListening ? 'Stop listening to voice input' : 'Speak your question in English (voice input)'}
               title={isListening ? 'Stop listening' : 'Voice input (English)'}
             >
-              <span aria-hidden="true">{isListening ? '⏹️' : '🎙️'}</span>
+              {isListening ? (
+                <span className="ai-mic-stop-dot" aria-hidden="true" />
+              ) : (
+                <MicIcon size={16} />
+              )}
             </button>
           )}
 
@@ -370,7 +375,7 @@ export default function AiPhraseAssistant({ isFavourite, onToggleFavourite }) {
       {/* Speech recognition error notice */}
       {speechError && (
         <div className="ai-warning-alert" role="status">
-          <span className="ai-warning-icon" aria-hidden="true">🎙️</span>
+          <AlertCircleIcon size={16} />
           <div className="ai-warning-body">
             <strong>Voice Input:</strong> {speechError}
           </div>
@@ -380,9 +385,9 @@ export default function AiPhraseAssistant({ isFavourite, onToggleFavourite }) {
       {/* Backend / Network error notice if any */}
       {errorMessage && (
         <div className="ai-warning-alert" role="status">
-          <span className="ai-warning-icon" aria-hidden="true">ℹ️</span>
+          <AlertCircleIcon size={16} />
           <div className="ai-warning-body">
-            <strong>Service notice:</strong> {errorMessage}
+            <strong>Notice:</strong> {errorMessage}
           </div>
         </div>
       )}
@@ -390,7 +395,7 @@ export default function AiPhraseAssistant({ isFavourite, onToggleFavourite }) {
       {/* Quick sample prompt suggestions */}
       {!hasSearched && (
         <div className="ai-assistant-samples">
-          <span className="ai-samples-label">Try asking:</span>
+          <span className="ai-samples-label">Suggested queries:</span>
           <div className="ai-samples-chips">
             {SAMPLE_PROMPTS.map((prompt) => (
               <button
@@ -400,7 +405,7 @@ export default function AiPhraseAssistant({ isFavourite, onToggleFavourite }) {
                 onClick={() => handleSampleClick(prompt)}
                 disabled={isLoading}
               >
-                "{prompt}"
+                &ldquo;{prompt}&rdquo;
               </button>
             ))}
           </div>
@@ -413,7 +418,7 @@ export default function AiPhraseAssistant({ isFavourite, onToggleFavourite }) {
           {/* Emergency notice */}
           {result.isEmergency && (
             <div className="ai-emergency-alert" role="alert">
-              <span className="ai-emergency-icon" aria-hidden="true">🚨</span>
+              <AlertCircleIcon size={20} />
               <p className="ai-emergency-text">{result.reply}</p>
             </div>
           )}
@@ -425,12 +430,12 @@ export default function AiPhraseAssistant({ isFavourite, onToggleFavourite }) {
               <div className="ai-source-badges">
                 {activeSource === 'groq' && (
                   <span className="ai-source-badge ai-source-groq">
-                    ⚡ Groq LLM Assistant
+                    Groq Assisted
                   </span>
                 )}
                 {activeSource === 'offline-local' && (
                   <span className="ai-source-badge ai-source-local">
-                    💾 Verified Local Phrasebook
+                    Verified Local Database
                   </span>
                 )}
               </div>
@@ -446,7 +451,7 @@ export default function AiPhraseAssistant({ isFavourite, onToggleFavourite }) {
                   <div key={phrase.id || `gen-${idx}`} className="ai-match-item">
                     <div className="ai-match-reason">
                       <span className={`ai-match-tag ${isDb ? 'tag-db' : 'tag-gen'}`}>
-                        {isDb ? '✓ Verified Database Match' : '🤖 AI-generated — not yet verified'}
+                        {isDb ? 'Verified Database Match' : 'Generated — Needs Verification'}
                       </span>
                       {phrase.reason && <span className="ai-match-text">{phrase.reason}</span>}
                     </div>
@@ -464,10 +469,10 @@ export default function AiPhraseAssistant({ isFavourite, onToggleFavourite }) {
           {/* Empty state & category suggestions */}
           {!result.isEmergency && (!result.suggestions || result.suggestions.length === 0) && (
             <div className="ai-no-match-box">
-              <span className="ai-no-match-icon" aria-hidden="true">🔍</span>
+              <SearchIcon size={28} className="ai-no-match-icon" />
               <h3 className="ai-no-match-title">No phrase suggestions found</h3>
               <p className="ai-no-match-msg">
-                We did not find a matching phrase for your request. Try rephrasing or browse one of the practical everyday situations below:
+                We did not find an exact match for your request. Try rephrasing or browse one of the practical everyday situations below:
               </p>
               {result.suggestedCategories && result.suggestedCategories.length > 0 && (
                 <div className="ai-suggested-categories">

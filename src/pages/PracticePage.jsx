@@ -5,6 +5,7 @@ import useStreak from '../hooks/useStreak';
 import situations from '../data/situations';
 import { getAllPhrases, getPhrasesByCategory } from '../utils/phraseUtils';
 import AudioButton from '../components/AudioButton';
+import { SituationIcon, CheckIcon, TargetIcon } from '../components/Icons';
 import './PracticePage.css';
 
 export default function PracticePage() {
@@ -80,7 +81,6 @@ export default function PracticePage() {
     }
 
     // Account for the re-appended card when deciding if session is over.
-    // React batches state, so sessionCards.length is still the old value here.
     const effectiveLength = sessionCards.length + (willRequeue ? 1 : 0);
 
     setRevealed(false);
@@ -115,9 +115,9 @@ export default function PracticePage() {
       <div className="container">
         {/* Header */}
         <header className="practice-header">
-          <h1 className="practice-title">Practice Kannada Flashcards</h1>
+          <h1 className="practice-title">Spaced Repetition Practice</h1>
           <p className="practice-description">
-            Reinforce everyday phrases using a 3-box Leitner spaced repetition system.
+            Reinforce everyday survival phrases using a 3-box Leitner memory system.
           </p>
         </header>
 
@@ -135,7 +135,10 @@ export default function PracticePage() {
               className={`filter-chip ${selectedCategory === sit.id ? 'filter-chip--active' : ''}`}
               onClick={() => handleCategoryChange(sit.id)}
             >
-              {sit.icon} {sit.title}
+              <span className="filter-chip-icon" aria-hidden="true">
+                <SituationIcon situationId={sit.id} size={14} />
+              </span>
+              <span>{sit.title}</span>
             </button>
           ))}
         </div>
@@ -173,10 +176,12 @@ export default function PracticePage() {
         {/* Session Finished Summary */}
         {availablePhrases.length > 0 && isSessionFinished && (
           <div className="practice-summary" role="region" aria-label="Practice Session Summary">
-            <span className="practice-summary-icon" aria-hidden="true">🎯</span>
-            <h2 className="practice-summary-title">Session Complete!</h2>
+            <span className="practice-summary-icon" aria-hidden="true">
+              <TargetIcon size={36} />
+            </span>
+            <h2 className="practice-summary-title">Session Complete</h2>
             <p className="practice-description">
-              Great effort practicing today. Keep consistent to build confidence.
+              Daily practice builds automatic recall for high-pressure transit and shopping situations.
             </p>
 
             <div className="practice-summary-stats">
@@ -186,7 +191,7 @@ export default function PracticePage() {
               </div>
               <div>
                 <div className="practice-summary-stat-val">{sessionGotItCount}</div>
-                <div className="practice-summary-stat-lbl">Got It</div>
+                <div className="practice-summary-stat-lbl">Recalled</div>
               </div>
               <div>
                 <div className="practice-summary-stat-val">
@@ -245,7 +250,7 @@ export default function PracticePage() {
                 <div className="flashcard-prompt-label">English Meaning</div>
                 <h2 className="flashcard-english">{currentCard.englishMeaning}</h2>
                 {currentCard.usageContext && (
-                  <p className="flashcard-context">💡 {currentCard.usageContext}</p>
+                  <p className="flashcard-context">{currentCard.usageContext}</p>
                 )}
               </div>
 
@@ -264,7 +269,7 @@ export default function PracticePage() {
                 </div>
               ) : (
                 <div className="flashcard-tap-hint">
-                  <span>👆 Tap to reveal Kannada</span>
+                  <span>Tap card to reveal Kannada</span>
                 </div>
               )}
             </div>
@@ -300,7 +305,7 @@ export default function PracticePage() {
                 onClick={() => handleReviewAction('again')}
                 aria-label="Mark as Again: Needs more practice"
               >
-                🔄 Again
+                Review Again
               </button>
               <button
                 type="button"
@@ -308,7 +313,7 @@ export default function PracticePage() {
                 onClick={() => handleReviewAction('got_it')}
                 aria-label="Mark as Got it: Promoted to next box"
               >
-                ✅ Got it
+                <CheckIcon size={16} /> Got It
               </button>
             </div>
           </div>

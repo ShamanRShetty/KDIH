@@ -1,4 +1,5 @@
 import { usePhraseAudio, isAudioSupported } from '../utils/audioUtils';
+import { VolumeIcon, SquareIcon } from './Icons';
 import './AudioButton.css';
 
 /**
@@ -31,7 +32,7 @@ export default function AudioButton({
           aria-label={`Audio unavailable for "${label}"`}
           title="Audio is not supported in this browser"
         >
-          <span aria-hidden="true">🔇</span>
+          <VolumeIcon size={16} />
         </button>
       </div>
     );
@@ -75,7 +76,7 @@ export default function AudioButton({
         title={normalAudio.isPlaying ? 'Stop audio' : 'Listen in Kannada'}
       >
         <span className="audio-btn-icon" aria-hidden="true">
-          {normalAudio.isPlaying ? '⏹' : '🔊'}
+          {normalAudio.isPlaying ? <SquareIcon size={14} /> : <VolumeIcon size={16} />}
         </span>
         {normalAudio.isPlaying && (
           <span className="audio-wave" aria-hidden="true">
@@ -102,10 +103,12 @@ export default function AudioButton({
           aria-pressed={slowAudio.isPlaying}
           title={slowAudio.isPlaying ? 'Stop audio' : 'Listen slowly (0.6x)'}
         >
-          <span className="audio-btn-icon" aria-hidden="true">
-            {slowAudio.isPlaying ? '⏹' : '🐢'}
-          </span>
-          <span className="audio-btn-slow-label">Slow</span>
+          {slowAudio.isPlaying ? (
+            <span className="audio-btn-icon" aria-hidden="true">
+              <SquareIcon size={12} />
+            </span>
+          ) : null}
+          <span className="audio-btn-slow-label">0.6×</span>
         </button>
       )}
     </div>

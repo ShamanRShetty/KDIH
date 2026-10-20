@@ -92,13 +92,13 @@ export default function SettingsPage() {
             Audio Playback Capabilities
           </h2>
           <p className="settings-section-description">
-            NammaSahaaya uses the standard Web Speech API with the <code>kn-IN</code> locale.
+            NammaSahaaya uses the browser Web Speech API with the <code>kn-IN</code> locale.
           </p>
           <div className="settings-audit-card">
             <div className="settings-audit-row">
               <span className="settings-audit-label">Web Speech API Support:</span>
               <span className="settings-audit-val">
-                {isAudioSupported() ? '✅ Supported in this browser' : '❌ Not supported'}
+                {isAudioSupported() ? 'Supported in this browser' : 'Not supported'}
               </span>
             </div>
             <div className="settings-audit-row">
@@ -106,9 +106,9 @@ export default function SettingsPage() {
               <span className="settings-audit-val">
                 {voiceAudit.checked ? (
                   voiceAudit.hasKannada ? (
-                    `✅ Yes (${voiceAudit.kannadaVoiceCount} Kannada voice${voiceAudit.kannadaVoiceCount > 1 ? 's' : ''} detected)`
+                    `Detected (${voiceAudit.kannadaVoiceCount} Kannada voice${voiceAudit.kannadaVoiceCount > 1 ? 's' : ''})`
                   ) : (
-                    '⚠️ Native Kannada voice not installed in OS/browser'
+                    'Native Kannada voice not installed in OS/browser'
                   )
                 ) : (
                   'Scanning voices...'
@@ -116,13 +116,13 @@ export default function SettingsPage() {
               </span>
             </div>
             <div className="settings-audit-row">
-              <span className="settings-audit-label">Total Browser Voices:</span>
+              <span className="settings-audit-label">Total System Voices:</span>
               <span className="settings-audit-val">
                 {voiceAudit.checked ? voiceAudit.totalVoices : '...'}
               </span>
             </div>
             <p className="settings-audit-disclaimer">
-              <strong>Notice:</strong> If a native Kannada voice is absent on your operating system (e.g. Windows Language Pack or Chrome TTS), the browser may synthesize using standard Indian multilingual engines or request speech resources. Synthesis is not a replacement for native-speaker recordings.
+              <strong>Notice:</strong> If a native Kannada voice is absent on your operating system (e.g. Windows Language Pack or Chrome TTS), the browser may synthesize using standard Indian multilingual engines.
             </p>
           </div>
         </section>
@@ -133,34 +133,34 @@ export default function SettingsPage() {
             Offline & App Installation
           </h2>
           <p className="settings-section-description">
-            NammaSahaaya functions 100% offline as a Progressive Web Application (PWA).
+            NammaSahaaya functions offline as an installable Progressive Web Application (PWA).
           </p>
           <div className="settings-audit-card">
             <div className="settings-audit-row">
               <span className="settings-audit-label">PWA Status:</span>
               <span className="settings-audit-val">
                 {typeof window !== 'undefined' && 'serviceWorker' in navigator
-                  ? '✅ Service Worker Active & Ready'
-                  : '⚠️ Offline worker not supported'}
+                  ? 'Service Worker Active & Ready'
+                  : 'Offline worker not supported'}
               </span>
             </div>
             <div className="settings-audit-row">
               <span className="settings-audit-label">Offline Phrase Access:</span>
               <span className="settings-audit-val">
-                ✅ All 49 phrases & dialogs cached locally
+                All 69 phrases & dialogs cached locally
               </span>
             </div>
             <div className="settings-audit-row">
               <span className="settings-audit-label">First Load Prerequisite:</span>
               <span className="settings-audit-val">
-                Internet required only for initial load
+                Internet required only for initial visit
               </span>
             </div>
             <p className="settings-audit-disclaimer">
-              <strong>How to Install on Mobile & Desktop:</strong><br />
-              • <strong>Android / Chrome / Edge:</strong> Tap the browser menu (⋮) and select <em>"Install app"</em> or <em>"Add to Home Screen"</em>.<br />
-              • <strong>iOS / Safari:</strong> Tap the Share button (⎋) and select <em>"Add to Home Screen"</em>.<br />
-              Once installed, NammaSahaaya launches instantly like a native mobile app without address bars.
+              <strong>Installation:</strong><br />
+              • <strong>Android / Chrome / Edge:</strong> Open browser menu and select <em>&ldquo;Install app&rdquo;</em>.<br />
+              • <strong>iOS / Safari:</strong> Tap Share button and select <em>&ldquo;Add to Home Screen&rdquo;</em>.<br />
+              Once installed, NammaSahaaya launches full-screen and operates without network access.
             </p>
           </div>
         </section>

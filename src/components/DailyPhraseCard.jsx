@@ -34,11 +34,10 @@ export default function DailyPhraseCard() {
     <article className="daily-phrase-card" aria-labelledby="daily-phrase-title">
       <div className="daily-phrase-top">
         <span id="daily-phrase-title" className="daily-phrase-badge">
-          ✨ Phrase of the Day
+          Phrase of the Day
         </span>
         <div className="daily-streak-badge" aria-label={`Practice streak: ${streakCount} days`}>
-          <span className="daily-streak-flame" aria-hidden="true">🔥</span>
-          <span>{streakCount} {streakCount === 1 ? 'day' : 'days'} streak</span>
+          <span>{streakCount} {streakCount === 1 ? 'day' : 'days'} practice streak</span>
         </div>
       </div>
 

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import PhraseCard from '../components/PhraseCard';
 import useFavourites from '../hooks/useFavourites';
 import { getAllPhrases } from '../utils/phraseUtils';
+import { StarIcon } from '../components/Icons';
 import './FavouritesPage.css';
 
 export default function FavouritesPage() {
@@ -19,21 +20,23 @@ export default function FavouritesPage() {
     <main className="page favourites-page">
       <div className="container">
         <div className="page-header">
-          <h1 className="page-title">Favourites</h1>
+          <h1 className="page-title">Saved Favourites</h1>
           <p className="page-subtitle">
-            Your saved phrases for quick access.
+            Essential phrases saved for quick access during travel and daily tasks.
           </p>
         </div>
 
         {favouritePhrases.length === 0 ? (
           <div className="empty-state">
-            <span className="empty-state-icon">⭐</span>
-            <p className="empty-state-title">No favourites yet</p>
+            <span className="empty-state-icon" aria-hidden="true">
+              <StarIcon size={36} />
+            </span>
+            <p className="empty-state-title">No saved phrases yet</p>
             <p className="empty-state-description">
-              Tap the star icon on any phrase to save it here for quick access.
+              Tap the star icon on any phrase in Explore or Practice mode to keep it pinned here.
             </p>
             <Link to="/explore" className="btn btn-primary">
-              Explore Phrases
+              Browse Phrases
             </Link>
           </div>
         ) : (

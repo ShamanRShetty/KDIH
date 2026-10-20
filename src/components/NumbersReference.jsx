@@ -24,7 +24,7 @@ export default function NumbersReference() {
     <section className="numbers-reference" aria-labelledby="numbers-reference-title">
       <div className="numbers-header">
         <h2 id="numbers-reference-title" className="numbers-title">
-          <span>🔢</span> Numbers & Money Reference
+          Numbers & Currency Reference
         </h2>
         <p className="numbers-subtitle">
           Essential numbers for prices, quantities, and cash handling in Kannada.

@@ -8,10 +8,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-full);
-  background-color: transparent;
-  border: 1px solid transparent;
-  color: var(--color-text-muted);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
   cursor: pointer;
   transition: all var(--transition-fast);
   flex-shrink: 0;
@@ -21,19 +21,28 @@
   min-height: 44px;
 }
 
+.audio-btn:hover {
+  background-color: var(--color-primary-surface);
+  color: var(--color-primary);
+  border-color: rgba(15, 76, 117, 0.25);
+}
+
 .audio-btn--slow {
-  gap: 2px;
+  gap: 4px;
   font-size: var(--text-xs);
-  padding: 0 6px;
-  border-radius: var(--radius-md);
-  color: var(--color-text-secondary);
+  padding: 0 10px;
+  border-radius: var(--radius-sm);
+  color: var(--color-primary);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  width: auto;
+  min-width: unset;
 }
 
 .audio-btn-slow-label {
-  font-size: 10px;
-  font-weight: var(--font-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-size: 12px;
+  font-weight: var(--font-semibold);
+  letter-spacing: 0.02em;
 }
 
 .audio-btn--sm {
@@ -60,13 +69,13 @@
 }
 
 .audio-btn:hover {
-  background-color: var(--color-bg);
+  background-color: var(--color-primary-surface);
   color: var(--color-primary);
-  border-color: var(--color-border-light);
+  border-color: rgba(15, 76, 117, 0.25);
 }
 
 .audio-btn:focus-visible {
-  outline: 3px solid var(--color-primary);
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
 

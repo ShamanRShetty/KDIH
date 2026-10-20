@@ -23,16 +23,55 @@
   display: flex;
   gap: var(--space-xs);
   overflow-x: auto;
-  padding: 2px 2px var(--space-sm) 2px;
+  padding: 4px 2px var(--space-sm) 2px;
   margin-bottom: var(--space-lg);
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  mask-image: linear-gradient(to right, black 85%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
 }
 
 .practice-filters::-webkit-scrollbar {
   display: none;
+}
+
+.practice-filters .filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.practice-filters .filter-chip:hover {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border-color: var(--color-text-muted);
+}
+
+.practice-filters .filter-chip--active {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border-color: var(--color-primary);
+}
+
+.practice-filters .filter-chip--active:hover {
+  background-color: var(--color-primary-dark);
+  color: #ffffff;
+}
+
+.filter-chip-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
 /* Leitner Boxes indicator bar */
@@ -62,7 +101,7 @@
   font-weight: var(--font-semibold);
   color: var(--color-text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.04em;
 }
 
 .practice-box-count {
@@ -84,7 +123,8 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
   color: var(--color-text-secondary);
   margin-bottom: var(--space-sm);
 }
@@ -94,25 +134,24 @@
   width: 100%;
   min-height: 280px;
   background: var(--color-surface);
-  border: 2px solid var(--color-border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-xl) var(--space-lg);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   text-align: center;
   cursor: pointer;
-  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
   user-select: none;
 }
 
 .flashcard:hover,
 .flashcard:focus-visible {
   border-color: var(--color-primary-light);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-md);
 }
 
 .flashcard-top {
@@ -264,16 +303,16 @@
   grid-template-columns: 1fr 1fr;
   gap: var(--space-md);
   width: 100%;
-  margin-top: var(--space-sm);
+  margin-top: var(--space-md);
 }
 
 .practice-btn-again {
-  min-height: 48px;
+  min-height: 44px;
   background-color: var(--color-surface);
   color: var(--color-healthcare);
-  border: 2px solid var(--color-healthcare);
+  border: 1px solid var(--color-healthcare);
   border-radius: var(--radius-md);
-  font-size: var(--text-base);
+  font-size: var(--text-sm);
   font-weight: var(--font-semibold);
   cursor: pointer;
   display: flex;
@@ -283,22 +322,18 @@
   transition: all var(--transition-fast);
 }
 
-.practice-btn-again:hover {
+.practice-btn-again:hover,
+.practice-btn-again:focus-visible {
   background-color: var(--color-healthcare-surface);
 }
 
-.practice-btn-again:hover,
-.practice-btn-again:focus-visible {
-  background-color: #fde8e7;
-}
-
 .practice-btn-gotit {
-  min-height: 48px;
-  background-color: var(--color-teal);
-  color: white;
-  border: 2px solid var(--color-teal);
+  min-height: 44px;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border: 1px solid var(--color-primary-dark);
   border-radius: var(--radius-md);
-  font-size: var(--text-base);
+  font-size: var(--text-sm);
   font-weight: var(--font-semibold);
   cursor: pointer;
   display: flex;
@@ -310,7 +345,7 @@
 
 .practice-btn-gotit:hover,
 .practice-btn-gotit:focus-visible {
-  background-color: var(--color-teal-light);
+  background-color: var(--color-primary-light);
 }
 
 /* Session Summary View */

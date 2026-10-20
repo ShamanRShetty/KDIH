@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import AudioButton from './AudioButton';
 import PhraseShowModal from './PhraseShowModal';
+import { EyeIcon, StarIcon, LightbulbIcon, ChevronDownIcon, ChevronUpIcon } from './Icons';
 import './PhraseCard.css';
 
 const EXPLANATIONS_STORAGE_KEY = 'nammasahaaya_explanations';
@@ -162,7 +163,7 @@ export default function PhraseCard({ phrase, isFavourite = false, onToggleFavour
               aria-label={`Show "${englishText || kannadaText}" in large view to another person`}
               title="Show to another person (large view)"
             >
-              <span aria-hidden="true">👁️</span>
+              <EyeIcon size={18} />
             </button>
 
             {/* Favourites Star */}
@@ -181,7 +182,7 @@ export default function PhraseCard({ phrase, isFavourite = false, onToggleFavour
                 aria-pressed={isFavourite}
                 title={isFavourite ? 'Remove from favourites' : 'Add to favourites'}
               >
-                <span aria-hidden="true">{isFavourite ? '★' : '☆'}</span>
+                <StarIcon size={18} filled={isFavourite} />
               </button>
             )}
 
@@ -198,7 +199,7 @@ export default function PhraseCard({ phrase, isFavourite = false, onToggleFavour
                 aria-label={showExplain ? `Hide explanation for "${englishText || kannadaText}"` : `Explain phrase "${englishText || kannadaText}"`}
                 title={showExplain ? 'Hide explanation' : 'Explain this phrase'}
               >
-                <span aria-hidden="true">💡</span>
+                <LightbulbIcon size={18} />
               </button>
             )}
 
@@ -217,7 +218,7 @@ export default function PhraseCard({ phrase, isFavourite = false, onToggleFavour
                 }
                 title={expanded ? 'Hide context' : 'When to use'}
               >
-                <span aria-hidden="true">{expanded ? '▲' : '▼'}</span>
+                {expanded ? <ChevronUpIcon size={16} /> : <ChevronDownIcon size={16} />}
               </button>
             )}
           </div>
@@ -243,10 +244,10 @@ export default function PhraseCard({ phrase, isFavourite = false, onToggleFavour
           >
             <div className="phrase-explain-header">
               <span className="phrase-explain-badge">
-                💡 Phrase Explanation
+                Linguistic Breakdown
               </span>
               <span className="phrase-explain-tag">
-                AI-generated — not yet verified
+                Automated Breakdown
               </span>
             </div>
 

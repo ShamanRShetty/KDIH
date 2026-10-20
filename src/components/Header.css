@@ -3,8 +3,9 @@
   top: 0;
   z-index: 100;
   background-color: var(--color-surface);
-  border-bottom: 1px solid var(--color-border-light);
+  border-bottom: 1px solid var(--color-border);
   height: var(--header-height);
+  box-shadow: 0 1px 2px rgba(18, 28, 42, 0.04);
 }
 
 .header-inner {
@@ -25,9 +26,17 @@
   text-decoration: none;
 }
 
-.header-logo {
-  font-size: var(--text-2xl);
-  line-height: 1;
+.header-symbol {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-primary-surface);
+  color: var(--color-primary);
+  border: 1px solid rgba(15, 76, 117, 0.18);
+  flex-shrink: 0;
 }
 
 .header-titles {
@@ -36,14 +45,15 @@
 }
 
 .header-name {
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   font-weight: var(--font-bold);
-  color: var(--color-primary);
+  color: var(--color-text);
+  letter-spacing: -0.01em;
   line-height: 1.2;
 }
 
 .header-tagline {
   font-size: var(--text-xs);
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   line-height: 1.2;
 }

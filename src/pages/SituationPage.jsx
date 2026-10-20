@@ -7,6 +7,7 @@ import useFavourites from '../hooks/useFavourites';
 import situations from '../data/situations';
 import { getPhrasesByCategory, getSubcategories } from '../utils/phraseUtils';
 import { getConversationsByCategory } from '../data/conversations';
+import { SituationIcon, SearchIcon } from '../components/Icons';
 import './SituationPage.css';
 
 export default function SituationPage() {
@@ -66,10 +67,12 @@ export default function SituationPage() {
       <main className="page">
         <div className="container">
           <div className="empty-state">
-            <span className="empty-state-icon">🔍</span>
+            <span className="empty-state-icon" aria-hidden="true">
+              <SearchIcon size={32} />
+            </span>
             <p className="empty-state-title">Situation not found</p>
             <p className="empty-state-description">
-              The situation you are looking for does not exist.
+              The situation you are looking for does not exist in the phrasebook.
             </p>
             <div className="situation-empty-actions">
               <Link to="/" className="btn btn-primary">
@@ -88,10 +91,10 @@ export default function SituationPage() {
   return (
     <main className="page situation-page">
       <div className="container">
-        {/* Navigation Breadcrumb with clear Return Home */}
+        {/* Navigation Breadcrumb */}
         <div className="situation-nav-links">
           <Link to="/" className="situation-back-link">
-            🏠 Home
+            Home
           </Link>
           <span className="situation-nav-divider">/</span>
           <Link to="/explore" className="situation-back-link">
@@ -107,7 +110,7 @@ export default function SituationPage() {
           style={{ '--accent': situation.color }}
         >
           <span className="situation-header-icon" aria-hidden="true">
-            {situation.icon}
+            <SituationIcon situationId={situation.id} size={28} />
           </span>
           <div>
             <h1 className="situation-header-title">{situation.title}</h1>
@@ -129,7 +132,7 @@ export default function SituationPage() {
               className={`situation-tab ${activeTab === 'phrases' ? 'situation-tab--active' : ''}`}
               onClick={() => setActiveTab('phrases')}
             >
-              📚 Common Phrases ({categoryPhrases.length})
+              Essential Phrases ({categoryPhrases.length})
             </button>
             <button
               role="tab"
@@ -137,7 +140,7 @@ export default function SituationPage() {
               className={`situation-tab ${activeTab === 'guided' ? 'situation-tab--active' : ''}`}
               onClick={() => setActiveTab('guided')}
             >
-              💬 Guided Conversation
+              Guided Dialogue Flow
             </button>
           </div>
         )}
@@ -151,7 +154,9 @@ export default function SituationPage() {
                 Search in {situation.title}
               </label>
               <div className="situation-search-input-box">
-                <span className="situation-search-icon" aria-hidden="true">🔍</span>
+                <span className="situation-search-icon" aria-hidden="true">
+                  <SearchIcon size={16} />
+                </span>
                 <input
                   id="cat-search"
                   type="search"
@@ -207,7 +212,9 @@ export default function SituationPage() {
             {/* Phrases List or Empty State */}
             {filteredPhrases.length === 0 ? (
               <div className="empty-state">
-                <span className="empty-state-icon">🔍</span>
+                <span className="empty-state-icon" aria-hidden="true">
+                  <SearchIcon size={32} />
+                </span>
                 <p className="empty-state-title">No matching phrases found</p>
                 <p className="empty-state-description">
                   {searchQuery

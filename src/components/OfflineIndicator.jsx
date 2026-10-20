@@ -1,4 +1,5 @@
 import useOnlineStatus from '../hooks/useOnlineStatus';
+import { AlertCircleIcon } from './Icons';
 import './OfflineIndicator.css';
 
 /**
@@ -20,9 +21,9 @@ export default function OfflineIndicator() {
       aria-live="polite"
     >
       <div className="container offline-indicator-inner">
-        <span className="offline-icon" aria-hidden="true">📡</span>
+        <AlertCircleIcon size={16} />
         <span className="offline-text">
-          <strong>Offline Mode Active</strong> — All local Kannada phrases, search, and guided conversations remain fully available.
+          <strong>Offline Mode Active:</strong> All 69 verified phrases, audio pronunciation, and practice flashcards are running from local browser cache.
         </span>
       </div>
     </div>

@@ -66,52 +66,47 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-full);
-  font-size: var(--text-base);
-  color: var(--color-text-muted);
-  background-color: transparent;
-  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 
 .phrase-action-btn:hover {
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  border-color: var(--color-border-light);
+  background-color: var(--color-primary-surface);
+  color: var(--color-primary);
+  border-color: rgba(15, 76, 117, 0.25);
 }
 
 .phrase-action-btn:focus-visible {
-  outline: 3px solid var(--color-primary);
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
 
-.phrase-card-fav {
-  font-size: var(--text-lg);
-}
-
 .phrase-card-fav--active {
-  color: #e6a817;
+  color: #b45309;
+  background-color: #fef3c7;
+  border-color: #fde68a;
 }
 
-.phrase-card-explain {
-  font-size: var(--text-base);
+.phrase-card-fav--active:hover {
+  background-color: #fde68a;
+  color: #92400e;
 }
 
 .phrase-card-explain--active {
-  color: #d97706;
-  background-color: #fef3c7;
-}
-
-.phrase-card-expand {
-  font-size: var(--text-xs);
+  color: var(--color-primary);
+  background-color: var(--color-primary-surface);
+  border-color: var(--color-primary-light);
 }
 
 .phrase-card-context {
   margin-top: var(--space-sm);
   padding-top: var(--space-sm);
-  border-top: 1px solid var(--color-border-light);
-  font-size: var(--text-sm);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--text-xs);
   color: var(--color-text-secondary);
   line-height: 1.5;
 }
