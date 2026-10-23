@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { getAllPhrases } from '../utils/phraseUtils';
 import useStreak from '../hooks/useStreak';
 import AudioButton from './AudioButton';
+import { useLang } from '../context/LanguageContext';
 import './DailyPhraseCard.css';
 
 /**
@@ -25,10 +26,17 @@ function getDeterministicDailyPhrase(phrases) {
 
 export default function DailyPhraseCard() {
   const { streakCount } = useStreak();
+  const { lang } = useLang();
   const allPhrases = useMemo(() => getAllPhrases(), []);
   const dailyPhrase = useMemo(() => getDeterministicDailyPhrase(allPhrases), [allPhrases]);
 
   if (!dailyPhrase) return null;
+
+  const englishMeaning = dailyPhrase.englishMeaning || dailyPhrase.english || '';
+  const hindiMeaning = dailyPhrase.hindiMeaning || '';
+  const primaryMeaning = (lang === 'hi' && hindiMeaning) ? hindiMeaning : englishMeaning;
+  const secondaryMeaning = (lang === 'hi' && hindiMeaning) ? englishMeaning : null;
+  const primaryLang = (lang === 'hi' && hindiMeaning) ? 'hi' : 'en';
 
   return (
     <article className="daily-phrase-card" aria-labelledby="daily-phrase-title">
@@ -48,9 +56,14 @@ export default function DailyPhraseCard() {
         <p className="daily-phrase-transliteration">
           {dailyPhrase.transliteration}
         </p>
-        <p className="daily-phrase-english">
-          &ldquo;{dailyPhrase.englishMeaning}&rdquo;
+        <p className={`daily-phrase-english${primaryLang === 'hi' ? ' devanagari-text' : ''}`} lang={primaryLang}>
+          &ldquo;{primaryMeaning}&rdquo;
         </p>
+        {secondaryMeaning && (
+          <p className="daily-phrase-secondary" lang="en">
+            &ldquo;{secondaryMeaning}&rdquo;
+          </p>
+        )}
       </div>
 
       <footer className="daily-phrase-footer">

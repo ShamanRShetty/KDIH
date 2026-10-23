@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { inspectVoices, isAudioSupported } from '../utils/audioUtils';
+import { useLang } from '../context/LanguageContext';
 import './SettingsPage.css';
 
 const FONT_SIZES = [
@@ -9,6 +10,7 @@ const FONT_SIZES = [
 ];
 
 export default function SettingsPage() {
+  const { lang, setLang } = useLang();
   const [fontSize, setFontSize] = useState(() => {
     return document.documentElement.style.fontSize || '16px';
   });
@@ -55,6 +57,36 @@ export default function SettingsPage() {
             Configure text readability and review audio engine capabilities.
           </p>
         </div>
+
+        {/* Meaning Language */}
+        <section className="settings-section" aria-labelledby="lang-pref-heading">
+          <h2 id="lang-pref-heading" className="settings-section-title">
+            Meaning Language / अर्थ भाषा
+          </h2>
+          <p className="settings-section-description">
+            Choose whether phrase meanings appear in English or Hindi (हिन्दी). Audio is always Kannada.
+          </p>
+          <div className="settings-font-options" role="radiogroup" aria-label="Meaning language options">
+            <button
+              type="button"
+              className={`settings-font-btn ${lang === 'en' ? 'settings-font-btn--active' : ''}`}
+              onClick={() => setLang('en')}
+              role="radio"
+              aria-checked={lang === 'en'}
+            >
+              English
+            </button>
+            <button
+              type="button"
+              className={`settings-font-btn ${lang === 'hi' ? 'settings-font-btn--active' : ''}`}
+              onClick={() => setLang('hi')}
+              role="radio"
+              aria-checked={lang === 'hi'}
+            >
+              हिन्दी
+            </button>
+          </div>
+        </section>
 
         {/* Accessibility: Font Size */}
         <section className="settings-section" aria-labelledby="font-size-heading">

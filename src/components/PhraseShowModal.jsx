@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import AudioButton from './AudioButton';
 import { CopyIcon, CheckIcon } from './Icons';
+import { useLang } from '../context/LanguageContext';
 import './PhraseShowModal.css';
 
 /**
@@ -38,11 +39,17 @@ export default function PhraseShowModal({ phrase, onClose }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 
+  const { lang } = useLang();
+
   if (!phrase) return null;
 
   const kannadaText = phrase.kannada || '';
   const transliterationText = phrase.transliteration || '';
   const englishText = phrase.englishMeaning || phrase.english || '';
+  const hindiText = phrase.hindiMeaning || '';
+  const primaryMeaning = (lang === 'hi' && hindiText) ? hindiText : englishText;
+  const secondaryMeaning = (lang === 'hi' && hindiText) ? englishText : null;
+  const primaryLang = (lang === 'hi' && hindiText) ? 'hi' : 'en';
   const contextText = phrase.usageContext || phrase.context || '';
   const audioText = phrase.audioText || kannadaText;
 
@@ -113,10 +120,16 @@ export default function PhraseShowModal({ phrase, onClose }) {
               {transliterationText}
             </p>
           )}
-          {englishText && (
-            <p className="phrase-modal-english">
-              {englishText}
+          {primaryMeaning && (
+            <p
+              className={`phrase-modal-english${primaryLang === 'hi' ? ' devanagari-text' : ''}`}
+              lang={primaryLang}
+            >
+              {primaryMeaning}
             </p>
+          )}
+          {secondaryMeaning && (
+            <p className="phrase-modal-meaning-secondary" lang="en">{secondaryMeaning}</p>
           )}
 
           {/* Copy Kannada Text Button */}

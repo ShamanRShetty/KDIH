@@ -95,6 +95,13 @@ for (const phrase of phrases) {
   // Check Kannada Unicode range
   const hasKannadaUnicode = /[\u0C80-\u0CFF]/.test(phrase.kannada);
   assert.ok(hasKannadaUnicode, `Phrase ${phrase.id} does not contain valid Kannada script: ${phrase.kannada}`);
+
+  // Check optional hindiMeaning (Devanagari Unicode)
+  if (phrase.hindiMeaning) {
+    assert.strictEqual(typeof phrase.hindiMeaning, 'string', `hindiMeaning in ${phrase.id} must be a string`);
+    const hasDevanagari = /[\u0900-\u097F]/.test(phrase.hindiMeaning);
+    assert.ok(hasDevanagari, `hindiMeaning in ${phrase.id} must contain Devanagari script: ${phrase.hindiMeaning}`);
+  }
 }
 
 console.log(`✓ All ${phrases.length} phrases passed schema and Unicode validations.`);

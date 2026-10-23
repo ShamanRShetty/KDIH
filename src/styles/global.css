@@ -42,6 +42,7 @@
   /* Typography Scale */
   --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-kannada: 'Noto Sans Kannada', 'Inter', sans-serif;
+  --font-devanagari: 'Noto Sans Devanagari', 'Mangal', 'Kokila', Arial Unicode MS, sans-serif;
 
   --text-xs: 0.75rem;     /* 12px */
   --text-sm: 0.875rem;    /* 14px */
@@ -152,6 +153,13 @@ ul, ol {
 /* --- Kannada text --- */
 .kannada-text {
   font-family: var(--font-kannada);
+  font-weight: var(--font-medium);
+  line-height: 1.8;
+}
+
+/* --- Devanagari (Hindi) text --- */
+.devanagari-text {
+  font-family: var(--font-devanagari);
   font-weight: var(--font-medium);
   line-height: 1.8;
 }

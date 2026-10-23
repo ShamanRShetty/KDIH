@@ -36,6 +36,7 @@ export default function ExplorePage() {
       const query = searchQuery.toLowerCase().trim();
       results = results.filter((phrase) => {
         const english = (phrase.englishMeaning || phrase.english || '').toLowerCase();
+        const hindi = (phrase.hindiMeaning || '').toLowerCase();
         const transliteration = (phrase.transliteration || '').toLowerCase();
         const kannada = phrase.kannada || '';
         const context = (phrase.usageContext || phrase.context || '').toLowerCase();
@@ -43,6 +44,7 @@ export default function ExplorePage() {
 
         return (
           english.includes(query) ||
+          hindi.includes(query) ||
           transliteration.includes(query) ||
           kannada.includes(query) ||
           context.includes(query) ||
@@ -73,7 +75,7 @@ export default function ExplorePage() {
             id="phrase-search"
             type="search"
             className="explore-search-input"
-            placeholder="Search in English, Kannada, or pronunciation..."
+            placeholder="Search in English, Hindi, Kannada, or pronunciation..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             autoComplete="off"

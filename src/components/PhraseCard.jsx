@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import replies from '../data/replies';
 import AudioButton from './AudioButton';
 import PhraseShowModal from './PhraseShowModal';
 import { EyeIcon, StarIcon, LightbulbIcon, ChevronDownIcon, ChevronUpIcon } from './Icons';
+import { useLang } from '../context/LanguageContext';
 import './PhraseCard.css';
 
 const EXPLANATIONS_STORAGE_KEY = 'nammasahaaya_explanations';
@@ -42,6 +44,7 @@ function saveStoredExplanation(phraseId, explanation) {
  * @param {function} [props.onToggleFavourite] - Callback to toggle favourite status
  */
 export default function PhraseCard({ phrase, isFavourite = false, onToggleFavourite }) {
+  const [showReplies, setShowReplies] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showExplain, setShowExplain] = useState(false);
@@ -107,11 +110,18 @@ export default function PhraseCard({ phrase, isFavourite = false, onToggleFavour
     }
   };
 
+  const { lang } = useLang();
+
   if (!phrase) return null;
 
   const kannadaText = phrase.kannada || '';
   const transliterationText = phrase.transliteration || '';
   const englishText = phrase.englishMeaning || phrase.english || '';
+  const hindiText = phrase.hindiMeaning || '';
+  // Primary meaning shown large; secondary shown small below
+  const primaryMeaning = (lang === 'hi' && hindiText) ? hindiText : englishText;
+  const secondaryMeaning = (lang === 'hi' && hindiText) ? englishText : null;
+  const primaryLang = (lang === 'hi' && hindiText) ? 'hi' : 'en';
   const contextText = phrase.usageContext || phrase.context || '';
   const subcategoryText = phrase.subcategory ? phrase.subcategory.replace('_', ' ') : null;
   const audioText = phrase.audioText || kannadaText;
@@ -141,8 +151,16 @@ export default function PhraseCard({ phrase, isFavourite = false, onToggleFavour
             {transliterationText && (
               <p className="phrase-card-transliteration">{transliterationText}</p>
             )}
-            {englishText && (
-              <p className="phrase-card-english">{englishText}</p>
+            {primaryMeaning && (
+              <p
+                className={`phrase-card-english${primaryLang === 'hi' ? ' devanagari-text' : ''}`}
+                lang={primaryLang}
+              >
+                {primaryMeaning}
+              </p>
+            )}
+            {secondaryMeaning && (
+              <p className="phrase-card-meaning-secondary" lang="en">{secondaryMeaning}</p>
             )}
           </div>
 
@@ -232,6 +250,46 @@ export default function PhraseCard({ phrase, isFavourite = false, onToggleFavour
           >
             <span className="phrase-card-context-label">When to use:</span>{' '}
             {contextText}
+          </div>
+        )}
+        {/* Replies Accordion Button */}
+        {replies[phrase.id] && (
+          <button
+            type="button"
+            className="phrase-action-btn phrase-card-replies"
+            onClick={() => setShowReplies(!showReplies)}
+            aria-expanded={showReplies}
+            aria-controls={phrase.id ? `phrase-replies-${phrase.id}` : undefined}
+            aria-label={showReplies ? `Hide possible replies for "${englishText || kannadaText}"` : `Show possible replies for "${englishText || kannadaText}"`}
+            title={showReplies ? 'Hide replies' : 'Show replies'}
+          >
+            <EyeIcon size={18} />
+          </button>
+        )}
+
+        {/* Collapsible Replies Section */}
+        {showReplies && replies[phrase.id] && (
+          <div id={phrase.id ? `phrase-replies-${phrase.id}` : undefined} className="phrase-card-replies-section" aria-label="Possible replies">
+            {replies[phrase.id].map((r, idx) => {
+              const replyPrimary = (lang === 'hi' && r.hindiMeaning) ? r.hindiMeaning : r.englishMeaning;
+              const replySecondary = (lang === 'hi' && r.hindiMeaning) ? r.englishMeaning : null;
+              const replyLang = (lang === 'hi' && r.hindiMeaning) ? 'hi' : 'en';
+
+              return (
+                <div key={idx} className="phrase-reply-item">
+                  <p className="reply-kannada" lang="kn">{r.kannada}</p>
+                  {r.transliteration && <p className="reply-transliteration">{r.transliteration}</p>}
+                  {replyPrimary && (
+                    <p className={`reply-english${replyLang === 'hi' ? ' devanagari-text' : ''}`} lang={replyLang}>
+                      {replyPrimary}
+                    </p>
+                  )}
+                  {replySecondary && (
+                    <p className="phrase-card-meaning-secondary" lang="en">{replySecondary}</p>
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
 

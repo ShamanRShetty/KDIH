@@ -10,6 +10,7 @@ import FavouritesPage from './pages/FavouritesPage';
 import SettingsPage from './pages/SettingsPage';
 import PracticePage from './pages/PracticePage';
 import { registerServiceWorker, applyServiceWorkerUpdate } from './utils/pwaUtils';
+import { LanguageProvider } from './context/LanguageContext';
 import './styles/global.css';
 
 export default function App() {
@@ -23,6 +24,7 @@ export default function App() {
   }, []);
 
   return (
+    <LanguageProvider>
     <BrowserRouter>
       <Header />
       <OfflineIndicator />
@@ -65,5 +67,6 @@ export default function App() {
       </Routes>
       <BottomNav />
     </BrowserRouter>
+    </LanguageProvider>
   );
 }

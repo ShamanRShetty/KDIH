@@ -3,15 +3,31 @@ import { Link } from 'react-router-dom';
 import usePracticeProgress from '../hooks/usePracticeProgress';
 import useStreak from '../hooks/useStreak';
 import situations from '../data/situations';
+import replies from '../data/replies';
 import { getAllPhrases, getPhrasesByCategory } from '../utils/phraseUtils';
 import AudioButton from '../components/AudioButton';
 import { SituationIcon, CheckIcon, TargetIcon } from '../components/Icons';
+import { useLang } from '../context/LanguageContext';
 import './PracticePage.css';
 
 export default function PracticePage() {
   const { practiceData, recordResult } = usePracticeProgress();
   const { recordPracticeActivity } = useStreak();
+  const { lang } = useLang();
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [listeningMode, setListeningMode] = useState(() => {
+    try {
+      return localStorage.getItem('nammasahaaya_listening') === 'true';
+    } catch { return false; }
+  });
+
+  const handleToggleListeningMode = () => {
+    setListeningMode((prev) => {
+      const next = !prev;
+      try { localStorage.setItem('nammasahaaya_listening', String(next)); } catch {}
+      return next;
+    });
+  };
 
   // Trigger streak recording when practice session is opened
   useState(() => {
@@ -110,6 +126,12 @@ export default function PracticePage() {
   const currentCard = sessionCards[currentIndex];
   const currentCardBox = currentCard ? (practiceData.cards[currentCard.id]?.box || 1) : 1;
 
+  const currentEnglish = currentCard ? (currentCard.englishMeaning || currentCard.english || '') : '';
+  const currentHindi = currentCard ? (currentCard.hindiMeaning || '') : '';
+  const currentPrimaryMeaning = (lang === 'hi' && currentHindi) ? currentHindi : currentEnglish;
+  const currentSecondaryMeaning = (lang === 'hi' && currentHindi) ? currentEnglish : null;
+  const currentPrimaryLang = (lang === 'hi' && currentHindi) ? 'hi' : 'en';
+
   return (
     <main className="page practice-page">
       <div className="container">
@@ -157,6 +179,26 @@ export default function PracticePage() {
             <div className="practice-box-title">Box 3 (Mastered)</div>
             <div className="practice-box-count">{boxCounts[3]}</div>
           </div>
+        </div>
+
+        {/* Speaking / Listening Mode Toggle */}
+        <div className="practice-mode-toggle" role="radiogroup" aria-label="Practice mode">
+          <button
+            type="button"
+            className={`mode-toggle-btn ${!listeningMode ? 'mode-toggle-btn--active' : ''}`}
+            onClick={() => listeningMode && handleToggleListeningMode()}
+            aria-pressed={!listeningMode}
+          >
+            🗣️ Speaking
+          </button>
+          <button
+            type="button"
+            className={`mode-toggle-btn ${listeningMode ? 'mode-toggle-btn--active' : ''}`}
+            onClick={() => !listeningMode && handleToggleListeningMode()}
+            aria-pressed={listeningMode}
+          >
+            👂 Listening
+          </button>
         </div>
 
         {/* Empty State when no phrases exist in category */}
@@ -236,8 +278,8 @@ export default function PracticePage() {
               }}
               aria-label={
                 revealed
-                  ? `Flashcard showing Kannada text and translation for ${currentCard.englishMeaning}. Click to hide.`
-                  : `Flashcard asking for Kannada translation of ${currentCard.englishMeaning}. Click to reveal.`
+                  ? `Flashcard showing Kannada text and translation for ${currentPrimaryMeaning}. Click to hide.`
+                  : `Flashcard asking for Kannada translation of ${currentPrimaryMeaning}. Click to reveal.`
               }
             >
               <div className="flashcard-top">
@@ -245,32 +287,93 @@ export default function PracticePage() {
                 <span className="flashcard-leitner-tag">Box {currentCardBox}</span>
               </div>
 
-              {/* Front: English meaning */}
-              <div className="flashcard-front">
-                <div className="flashcard-prompt-label">English Meaning</div>
-                <h2 className="flashcard-english">{currentCard.englishMeaning}</h2>
-                {currentCard.usageContext && (
-                  <p className="flashcard-context">{currentCard.usageContext}</p>
-                )}
-              </div>
-
-              {/* Back: Kannada Script + Transliteration + Audio */}
-              {revealed ? (
-                <div className="flashcard-back">
-                  <p className="flashcard-kannada" lang="kn">{currentCard.kannada}</p>
-                  <p className="flashcard-transliteration">{currentCard.transliteration}</p>
-                  <div className="flashcard-audio-wrap" onClick={(e) => e.stopPropagation()}>
-                    <AudioButton
-                      kannadaText={currentCard.audioText || currentCard.kannada}
-                      label={currentCard.englishMeaning}
-                      size="md"
-                    />
+              {/* Front / Back content depends on mode */}
+              {listeningMode ? (
+                <>
+                  {/* Listening Mode: Front = Kannada audio prompt */}
+                  <div className="flashcard-front">
+                    <div className="flashcard-prompt-label">Listen &amp; Identify</div>
+                    <div className="flashcard-audio-wrap" onClick={(e) => e.stopPropagation()}>
+                      <AudioButton
+                        kannadaText={currentCard.audioText || currentCard.kannada}
+                        label={currentPrimaryMeaning}
+                        size="lg"
+                      />
+                    </div>
+                    <p className="flashcard-hint-text">Play the audio, then tap to reveal meaning</p>
                   </div>
-                </div>
+
+                  {/* Listening Mode: Back = Meaning + Kannada script */}
+                  {revealed ? (
+                    <div className="flashcard-back">
+                      <h2 className={`flashcard-english${currentPrimaryLang === 'hi' ? ' devanagari-text' : ''}`} lang={currentPrimaryLang}>
+                        {currentPrimaryMeaning}
+                      </h2>
+                      {currentSecondaryMeaning && (
+                        <p className="flashcard-secondary" lang="en">{currentSecondaryMeaning}</p>
+                      )}
+                      <p className="flashcard-kannada" lang="kn">{currentCard.kannada}</p>
+                      <p className="flashcard-transliteration">{currentCard.transliteration}</p>
+                      {replies[currentCard.id] && (
+                        <div className="flashcard-replies">
+                          <span className="flashcard-replies-label">They may reply:</span>
+                          {replies[currentCard.id].map((r, idx) => {
+                            const replyPrimary = (lang === 'hi' && r.hindiMeaning) ? r.hindiMeaning : r.englishMeaning;
+                            return (
+                              <div key={idx} className="flashcard-reply-item">
+                                <span className="flashcard-reply-kn" lang="kn">{r.kannada}</span>
+                                <span className={`flashcard-reply-en${lang === 'hi' && r.hindiMeaning ? ' devanagari-text' : ''}`}>
+                                  {replyPrimary}
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="flashcard-tap-hint">
+                      <span>Tap card to reveal meaning</span>
+                    </div>
+                  )}
+                </>
               ) : (
-                <div className="flashcard-tap-hint">
-                  <span>Tap card to reveal Kannada</span>
-                </div>
+                <>
+                  {/* Speaking Mode (default): Front = Primary meaning */}
+                  <div className="flashcard-front">
+                    <div className="flashcard-prompt-label">
+                      {currentPrimaryLang === 'hi' ? 'Meaning (हिन्दी)' : 'Meaning (English)'}
+                    </div>
+                    <h2 className={`flashcard-english${currentPrimaryLang === 'hi' ? ' devanagari-text' : ''}`} lang={currentPrimaryLang}>
+                      {currentPrimaryMeaning}
+                    </h2>
+                    {currentSecondaryMeaning && (
+                      <p className="flashcard-secondary" lang="en">{currentSecondaryMeaning}</p>
+                    )}
+                    {currentCard.usageContext && (
+                      <p className="flashcard-context">{currentCard.usageContext}</p>
+                    )}
+                  </div>
+
+                  {/* Speaking Mode: Back = Kannada Script + Transliteration + Audio */}
+                  {revealed ? (
+                    <div className="flashcard-back">
+                      <p className="flashcard-kannada" lang="kn">{currentCard.kannada}</p>
+                      <p className="flashcard-transliteration">{currentCard.transliteration}</p>
+                      <div className="flashcard-audio-wrap" onClick={(e) => e.stopPropagation()}>
+                        <AudioButton
+                          kannadaText={currentCard.audioText || currentCard.kannada}
+                          label={currentPrimaryMeaning}
+                          size="md"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flashcard-tap-hint">
+                      <span>Tap card to reveal Kannada</span>
+                    </div>
+                  )}
+                </>
               )}
             </div>
 

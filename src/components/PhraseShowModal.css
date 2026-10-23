@@ -111,6 +111,14 @@
 .phrase-modal-english {
   font-size: clamp(1rem, 2.8vw, 1.25rem);
   color: var(--color-text-secondary);
+  margin-bottom: var(--space-xs);
+}
+
+.phrase-modal-meaning-secondary {
+  font-size: clamp(0.85rem, 2.2vw, 1rem);
+  color: var(--color-text-secondary);
+  opacity: 0.75;
+  margin-top: 0;
   margin-bottom: var(--space-lg);
 }
 

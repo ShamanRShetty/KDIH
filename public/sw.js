@@ -10,7 +10,7 @@
  * 6. Protection against caching unwanted 3rd party or sensitive APIs.
  */
 
-const CACHE_NAME = 'nammasahaaya-v2';
+const CACHE_NAME = 'nammasahaaya-v4';
 
 // Core Application Shell assets to pre-cache on install
 const PRECACHE_ASSETS = [
