@@ -122,10 +122,47 @@
   margin-bottom: var(--space-lg);
 }
 
-.phrase-modal-copy-wrap {
+.phrase-modal-btn-row {
   margin-bottom: var(--space-md);
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.phrase-modal-wbw-btn {
+  background-color: var(--color-bg);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary-light);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: 0 var(--space-md);
+  border-radius: var(--radius-md);
+  font-weight: var(--font-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.phrase-modal-wbw-btn:hover {
+  background-color: var(--color-primary-surface);
+}
+
+.phrase-modal-wbw-btn--active {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border-color: var(--color-primary);
+}
+
+.phrase-modal-wbw-btn--active:hover {
+  background-color: var(--color-primary-dark, #0c3d5e);
+}
+
+.phrase-modal-wbw-wrap {
+  margin-bottom: var(--space-md);
+  text-align: left;
 }
 
 .phrase-modal-copy-btn {

@@ -91,6 +91,44 @@ export function inspectVoices() {
   });
 }
 
+const VOICE_NOTICE_STORAGE_KEY = 'nammasahaaya_kn_voice_notice_seen';
+
+/**
+ * Checks if a native Kannada voice is installed on this device.
+ */
+export function hasKannadaVoice(voices) {
+  const voiceList = voices || (typeof window !== 'undefined' && 'speechSynthesis' in window ? window.speechSynthesis.getVoices() : []);
+  return voiceList.some(
+    (v) =>
+      (v.lang && (v.lang.toLowerCase().startsWith('kn') || v.lang.toLowerCase().includes('knda'))) ||
+      (v.name && v.name.toLowerCase().includes('kannada'))
+  );
+}
+
+/**
+ * Checks whether the one-time missing voice notice should be triggered.
+ * If triggered, marks it as seen so it only fires once.
+ */
+export function checkAndTriggerVoiceNotice() {
+  if (typeof window === 'undefined') return false;
+  try {
+    const seen = localStorage.getItem(VOICE_NOTICE_STORAGE_KEY);
+    if (seen === 'true') return false;
+
+    // Check if Kannada voice is actually present
+    const voices = 'speechSynthesis' in window ? window.speechSynthesis.getVoices() || [] : [];
+    if (voices.length > 0 && hasKannadaVoice(voices)) {
+      return false; // Kannada voice is present, no notice needed
+    }
+
+    // Mark as seen so user is only notified once
+    localStorage.setItem(VOICE_NOTICE_STORAGE_KEY, 'true');
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Finds the best available voice in Chromium/Brave/Chrome/Edge/Firefox.
  * 1. Dedicated Kannada voice ('kn-IN', 'kn', 'kannada')

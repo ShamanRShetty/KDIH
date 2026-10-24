@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import AudioButton from './AudioButton';
-import { CopyIcon, CheckIcon } from './Icons';
+import { CopyIcon, CheckIcon, BookOpenIcon } from './Icons';
+import WordByWordPlayer from './WordByWordPlayer';
+import { getMatchedWords } from '../utils/phraseUtils';
+import { stopCurrentAudio } from '../utils/audioUtils';
 import { useLang } from '../context/LanguageContext';
 import './PhraseShowModal.css';
 
@@ -23,6 +26,7 @@ import './PhraseShowModal.css';
 export default function PhraseShowModal({ phrase, onClose }) {
   const closeButtonRef = useRef(null);
   const [copied, setCopied] = useState(false);
+  const [showWordByWord, setShowWordByWord] = useState(false);
 
   useEffect(() => {
     // Focus the close button on open
@@ -32,12 +36,21 @@ export default function PhraseShowModal({ phrase, onClose }) {
 
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
+        stopCurrentAudio();
         onClose();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      stopCurrentAudio();
+    };
   }, [onClose]);
+
+  const handleClose = () => {
+    stopCurrentAudio();
+    onClose();
+  };
 
   const { lang } = useLang();
 
@@ -52,6 +65,7 @@ export default function PhraseShowModal({ phrase, onClose }) {
   const primaryLang = (lang === 'hi' && hindiText) ? 'hi' : 'en';
   const contextText = phrase.usageContext || phrase.context || '';
   const audioText = phrase.audioText || kannadaText;
+  const { matched, pairs } = getMatchedWords(phrase);
 
   const handleCopyKannada = async () => {
     if (!kannadaText) return;
@@ -80,7 +94,7 @@ export default function PhraseShowModal({ phrase, onClose }) {
   return (
     <div
       className="phrase-modal-backdrop"
-      onClick={onClose}
+      onClick={handleClose}
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-kannada-heading"
@@ -99,7 +113,7 @@ export default function PhraseShowModal({ phrase, onClose }) {
             ref={closeButtonRef}
             type="button"
             className="phrase-modal-close"
-            onClick={onClose}
+            onClick={handleClose}
             aria-label="Close full view (Esc)"
             title="Close (Esc)"
           >
@@ -132,8 +146,8 @@ export default function PhraseShowModal({ phrase, onClose }) {
             <p className="phrase-modal-meaning-secondary" lang="en">{secondaryMeaning}</p>
           )}
 
-          {/* Copy Kannada Text Button */}
-          <div className="phrase-modal-copy-wrap">
+          {/* Action Row: Copy and Word by Word toggle */}
+          <div className="phrase-modal-btn-row">
             <button
               type="button"
               className={`btn btn-sm phrase-modal-copy-btn ${
@@ -145,7 +159,33 @@ export default function PhraseShowModal({ phrase, onClose }) {
               <span aria-hidden="true">{copied ? <CheckIcon size={14} /> : <CopyIcon size={14} />}</span>
               <span>{copied ? 'Copied' : 'Copy Kannada'}</span>
             </button>
+
+            {matched && (
+              <button
+                type="button"
+                className={`btn btn-sm phrase-modal-wbw-btn ${
+                  showWordByWord ? 'phrase-modal-wbw-btn--active' : ''
+                }`}
+                onClick={() => setShowWordByWord(!showWordByWord)}
+                aria-expanded={showWordByWord}
+                aria-label={
+                  showWordByWord
+                    ? `Hide word by word breakdown for "${englishText || kannadaText}"`
+                    : `Show word by word breakdown for "${englishText || kannadaText}"`
+                }
+              >
+                <span aria-hidden="true"><BookOpenIcon size={14} /></span>
+                <span>Word by word</span>
+              </button>
+            )}
           </div>
+
+          {/* Word by word breakdown component */}
+          {showWordByWord && matched && (
+            <div className="phrase-modal-wbw-wrap">
+              <WordByWordPlayer pairs={pairs} phraseLabel={englishText || kannadaText} />
+            </div>
+          )}
 
           {contextText && (
             <div className="phrase-modal-context">
@@ -167,7 +207,7 @@ export default function PhraseShowModal({ phrase, onClose }) {
           <button
             type="button"
             className="btn btn-secondary phrase-modal-done-btn"
-            onClick={onClose}
+            onClick={handleClose}
           >
             Done
           </button>

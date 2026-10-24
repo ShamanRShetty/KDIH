@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import usePracticeProgress from '../hooks/usePracticeProgress';
 import useStreak from '../hooks/useStreak';
@@ -6,6 +6,7 @@ import situations from '../data/situations';
 import replies from '../data/replies';
 import { getAllPhrases, getPhrasesByCategory } from '../utils/phraseUtils';
 import AudioButton from '../components/AudioButton';
+import { stopCurrentAudio } from '../utils/audioUtils';
 import { SituationIcon, CheckIcon, TargetIcon } from '../components/Icons';
 import { useLang } from '../context/LanguageContext';
 import './PracticePage.css';
@@ -30,9 +31,12 @@ export default function PracticePage() {
   };
 
   // Trigger streak recording when practice session is opened
-  useState(() => {
+  useEffect(() => {
     recordPracticeActivity();
-  });
+    return () => {
+      stopCurrentAudio();
+    };
+  }, []);
   const [revealed, setRevealed] = useState(false);
   const [sessionCards, setSessionCards] = useState(() => {
     return getAllPhrases();
@@ -61,6 +65,7 @@ export default function PracticePage() {
   }, [availablePhrases, practiceData.cards]);
 
   const handleCategoryChange = (catId) => {
+    stopCurrentAudio();
     setSelectedCategory(catId);
     const phrases = catId === 'all' ? getAllPhrases() : getPhrasesByCategory(catId);
     setSessionCards(phrases);
@@ -72,6 +77,7 @@ export default function PracticePage() {
   };
 
   const handleStartNewSession = () => {
+    stopCurrentAudio();
     const phrases = selectedCategory === 'all' ? getAllPhrases() : getPhrasesByCategory(selectedCategory);
     setSessionCards(phrases);
     setCurrentIndex(0);
@@ -83,6 +89,7 @@ export default function PracticePage() {
 
   const handleReviewAction = (result) => {
     if (!currentCard) return;
+    stopCurrentAudio();
 
     if (result === 'got_it') {
       setSessionGotItCount((prev) => prev + 1);
@@ -108,6 +115,7 @@ export default function PracticePage() {
   };
 
   const handleNextCard = () => {
+    stopCurrentAudio();
     setRevealed(false);
     if (currentIndex + 1 < sessionCards.length) {
       setCurrentIndex((prev) => prev + 1);
@@ -117,6 +125,7 @@ export default function PracticePage() {
   };
 
   const handlePrevCard = () => {
+    stopCurrentAudio();
     if (currentIndex > 0) {
       setRevealed(false);
       setCurrentIndex((prev) => prev - 1);

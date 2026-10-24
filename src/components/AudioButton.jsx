@@ -1,4 +1,5 @@
-import { usePhraseAudio, isAudioSupported } from '../utils/audioUtils';
+import { useState } from 'react';
+import { usePhraseAudio, isAudioSupported, checkAndTriggerVoiceNotice } from '../utils/audioUtils';
 import { VolumeIcon, SquareIcon } from './Icons';
 import './AudioButton.css';
 
@@ -19,6 +20,7 @@ export default function AudioButton({
   size = 'md',
   showSlow = true,
 }) {
+  const [showVoiceNotice, setShowVoiceNotice] = useState(false);
   const supported = isAudioSupported() || Boolean(audioUrl);
   const normalAudio = usePhraseAudio(kannadaText, audioUrl, 0.85);
   const slowAudio = usePhraseAudio(kannadaText, audioUrl, 0.6);
@@ -38,8 +40,15 @@ export default function AudioButton({
     );
   }
 
+  const maybeNotifyMissingVoice = () => {
+    if (!audioUrl && checkAndTriggerVoiceNotice()) {
+      setShowVoiceNotice(true);
+    }
+  };
+
   const handleNormalClick = (e) => {
     e.stopPropagation();
+    maybeNotifyMissingVoice();
     if (slowAudio.isPlaying) slowAudio.stop();
     if (normalAudio.isPlaying) {
       normalAudio.stop();
@@ -50,6 +59,7 @@ export default function AudioButton({
 
   const handleSlowClick = (e) => {
     e.stopPropagation();
+    maybeNotifyMissingVoice();
     if (normalAudio.isPlaying) normalAudio.stop();
     if (slowAudio.isPlaying) {
       slowAudio.stop();
@@ -110,6 +120,30 @@ export default function AudioButton({
           ) : null}
           <span className="audio-btn-slow-label">0.6×</span>
         </button>
+      )}
+
+      {showVoiceNotice && (
+        <div className="audio-voice-notice" role="status" aria-live="polite">
+          <div className="audio-voice-notice-content">
+            <span className="audio-voice-notice-text">
+              No Kannada voice found on this device. Use Show to Person instead.
+            </span>
+            <span className="audio-voice-notice-hint">
+              Tip: Check your device&rsquo;s Text-to-Speech settings to install Kannada speech data.
+            </span>
+          </div>
+          <button
+            type="button"
+            className="audio-voice-notice-close"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowVoiceNotice(false);
+            }}
+            aria-label="Dismiss notice"
+          >
+            ✕
+          </button>
+        </div>
       )}
     </div>
   );

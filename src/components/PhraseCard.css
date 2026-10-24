@@ -103,6 +103,27 @@
   color: #92400e;
 }
 
+.phrase-card-wbw--active {
+  color: var(--color-primary);
+  background-color: var(--color-primary-surface);
+  border-color: var(--color-primary-light);
+}
+
+.phrase-card-wbw-section {
+  animation: wbwFadeIn 0.2s ease-out;
+}
+
+@keyframes wbwFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phrase-card-wbw-section {
+    animation: none !important;
+  }
+}
+
 .phrase-card-explain--active {
   color: var(--color-primary);
   background-color: var(--color-primary-surface);

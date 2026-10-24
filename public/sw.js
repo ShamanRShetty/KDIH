@@ -10,7 +10,7 @@
  * 6. Protection against caching unwanted 3rd party or sensitive APIs.
  */
 
-const CACHE_NAME = 'nammasahaaya-v4';
+const CACHE_NAME = 'nammasahaaya-v6';
 
 // Core Application Shell assets to pre-cache on install
 const PRECACHE_ASSETS = [
@@ -150,8 +150,70 @@ self.addEventListener('fetch', (event) => {
 });
 
 // Handle SW messages from application
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
+self.addEventListener('message', async (event) => {
+  if (!event.data) return;
+
+  if (event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
+  }
+
+  if (event.data.type === 'PREPARE_OFFLINE') {
+    const client = event.source;
+    const assetsToCache = [
+      '/',
+      '/index.html',
+      '/manifest.json',
+      '/favicon.svg',
+      '/pwa-icon.svg',
+      '/icons.svg',
+      '/explore',
+      '/favourites',
+      '/practice',
+      '/settings',
+      'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Kannada:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap'
+    ];
+
+    try {
+      const cache = await caches.open(CACHE_NAME);
+      let successCount = 0;
+
+      for (let i = 0; i < assetsToCache.length; i++) {
+        const url = assetsToCache[i];
+        try {
+          const response = await fetch(url, { cache: 'reload' });
+          if (response && (response.status === 200 || response.type === 'opaque')) {
+            await cache.put(url, response);
+            successCount++;
+          }
+        } catch {
+          // If a single route fails, continue with others
+        }
+
+        if (client && client.postMessage) {
+          client.postMessage({
+            type: 'PREPARE_OFFLINE_PROGRESS',
+            current: i + 1,
+            total: assetsToCache.length,
+            percent: Math.round(((i + 1) / assetsToCache.length) * 100)
+          });
+        }
+      }
+
+      const keys = await cache.keys();
+      if (client && client.postMessage) {
+        client.postMessage({
+          type: 'PREPARE_OFFLINE_SUCCESS',
+          totalCached: keys.length,
+          freshlyCached: successCount
+        });
+      }
+    } catch (err) {
+      if (client && client.postMessage) {
+        client.postMessage({
+          type: 'PREPARE_OFFLINE_FAILURE',
+          error: err.message || 'Unable to update offline cache'
+        });
+      }
+    }
   }
 });

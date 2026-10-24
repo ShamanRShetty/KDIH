@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import replies from '../data/replies';
 import AudioButton from './AudioButton';
 import PhraseShowModal from './PhraseShowModal';
-import { EyeIcon, StarIcon, LightbulbIcon, ChevronDownIcon, ChevronUpIcon } from './Icons';
+import { EyeIcon, StarIcon, LightbulbIcon, ChevronDownIcon, ChevronUpIcon, BookOpenIcon } from './Icons';
+import WordByWordPlayer from './WordByWordPlayer';
+import { getMatchedWords } from '../utils/phraseUtils';
 import { useLang } from '../context/LanguageContext';
 import './PhraseCard.css';
 
@@ -45,6 +47,7 @@ function saveStoredExplanation(phraseId, explanation) {
  */
 export default function PhraseCard({ phrase, isFavourite = false, onToggleFavourite }) {
   const [showReplies, setShowReplies] = useState(false);
+  const [showWordByWord, setShowWordByWord] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showExplain, setShowExplain] = useState(false);
@@ -126,6 +129,7 @@ export default function PhraseCard({ phrase, isFavourite = false, onToggleFavour
   const subcategoryText = phrase.subcategory ? phrase.subcategory.replace('_', ' ') : null;
   const audioText = phrase.audioText || kannadaText;
   const audioUrl = phrase.audioUrl || null;
+  const { matched, pairs } = getMatchedWords(phrase);
 
   return (
     <>
@@ -204,6 +208,27 @@ export default function PhraseCard({ phrase, isFavourite = false, onToggleFavour
               </button>
             )}
 
+            {/* Word by word breakdown button (only for matched phrases) */}
+            {matched && (
+              <button
+                type="button"
+                className={`phrase-action-btn phrase-card-wbw ${
+                  showWordByWord ? 'phrase-card-wbw--active' : ''
+                }`}
+                onClick={() => setShowWordByWord(!showWordByWord)}
+                aria-expanded={showWordByWord}
+                aria-controls={phrase.id ? `phrase-wbw-${phrase.id}` : undefined}
+                aria-label={
+                  showWordByWord
+                    ? `Hide word-by-word practice for "${englishText || kannadaText}"`
+                    : `Practice word by word for "${englishText || kannadaText}"`
+                }
+                title={showWordByWord ? 'Hide word by word' : 'Word by word pronunciation'}
+              >
+                <BookOpenIcon size={18} />
+              </button>
+            )}
+
             {/* Explain Phrase Button (visible if online or already cached) */}
             {phrase.id && (isOnline || Boolean(explanation)) && (
               <button
@@ -250,6 +275,13 @@ export default function PhraseCard({ phrase, isFavourite = false, onToggleFavour
           >
             <span className="phrase-card-context-label">When to use:</span>{' '}
             {contextText}
+          </div>
+        )}
+
+        {/* Word by Word Section */}
+        {showWordByWord && matched && (
+          <div id={phrase.id ? `phrase-wbw-${phrase.id}` : undefined} className="phrase-card-wbw-section">
+            <WordByWordPlayer pairs={pairs} phraseLabel={englishText || kannadaText} />
           </div>
         )}
         {/* Replies Accordion Button */}

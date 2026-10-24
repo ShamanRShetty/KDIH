@@ -182,3 +182,29 @@ export function getPhraseById(id) {
   return getAllPhrases().find((p) => p.id === id) || null;
 }
 
+/**
+ * Checks if a phrase has matched space-separated words between Kannada and transliteration.
+ *
+ * @param {object} phrase
+ * @returns {{ matched: boolean, pairs: Array<{ kannada: string, transliteration: string }> }}
+ */
+export function getMatchedWords(phrase) {
+  if (!phrase || !phrase.kannada || !phrase.transliteration) {
+    return { matched: false, pairs: [] };
+  }
+
+  const kWords = phrase.kannada.trim().split(/\s+/).filter(Boolean);
+  const tWords = phrase.transliteration.trim().split(/\s+/).filter(Boolean);
+
+  if (kWords.length > 0 && kWords.length === tWords.length) {
+    const pairs = kWords.map((k, i) => ({
+      kannada: k,
+      transliteration: tWords[i],
+    }));
+    return { matched: true, pairs };
+  }
+
+  return { matched: false, pairs: [] };
+}
+
+
