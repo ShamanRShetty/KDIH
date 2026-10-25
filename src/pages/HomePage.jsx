@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import SituationCard from '../components/SituationCard';
 import DailyPhraseCard from '../components/DailyPhraseCard';
+import { IdCardIcon } from '../components/Icons';
 import situations from '../data/situations';
 import './HomePage.css';
 
@@ -35,6 +36,10 @@ export default function HomePage() {
               </Link>
               <Link to="/practice" className="btn btn-secondary btn-lg hero-cta">
                 Practice Flashcards
+              </Link>
+              <Link to="/me" className="btn btn-secondary btn-lg hero-cta hero-cta--aboutme">
+                <IdCardIcon size={18} />
+                <span>About Me Card</span>
               </Link>
             </div>
           </div>

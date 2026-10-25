@@ -468,7 +468,7 @@
   flex-direction: column;
   gap: 2px;
   padding: 6px 10px;
-  background: var(--color-primary-surface, #f0f6ff);
+  background-color: var(--color-primary-surface);
   border-radius: var(--radius-sm);
 }
 

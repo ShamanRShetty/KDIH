@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { SituationIcon, ArrowRightIcon } from './Icons';
 import './SituationCard.css';
 
@@ -14,26 +14,10 @@ import './SituationCard.css';
  * @param {string} props.situation.color
  */
 export default function SituationCard({ situation }) {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate(`/situation/${situation.id}`);
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      handleClick();
-    }
-  };
-
   return (
-    <div
+    <Link
+      to={`/situation/${situation.id}`}
       className="situation-card card card-interactive"
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      role="button"
-      tabIndex={0}
       aria-label={`${situation.title} — ${situation.description}`}
       style={{ '--card-accent': situation.color }}
     >
@@ -52,6 +36,7 @@ export default function SituationCard({ situation }) {
       <div className="situation-card-arrow" aria-hidden="true">
         <ArrowRightIcon size={18} />
       </div>
-    </div>
+    </Link>
   );
 }
+

@@ -94,7 +94,7 @@
 .ai-assistant-input {
   width: 100%;
   padding: 0.65rem 1rem;
-  padding-right: 5rem;
+  padding-right: 5.5rem;
   font-size: var(--text-sm);
   color: var(--color-text);
   background-color: var(--color-surface);
@@ -109,9 +109,37 @@
   box-shadow: 0 0 0 2px var(--color-focus-ring);
 }
 
+.ai-assistant-clear-btn {
+  position: absolute;
+  right: 3rem;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  color: var(--color-text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.ai-assistant-clear-btn:hover {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+.ai-assistant-clear-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
 .ai-assistant-mic-btn {
   position: absolute;
-  right: 2.25rem;
+  right: 0.5rem;
   width: 32px;
   height: 32px;
   min-width: 32px;
@@ -134,9 +162,9 @@
 }
 
 .ai-assistant-mic-btn--listening {
-  background-color: #fee2e2 !important;
-  color: #dc2626 !important;
-  border-color: #f87171 !important;
+  background-color: var(--color-healthcare-surface) !important;
+  color: var(--color-healthcare) !important;
+  border-color: var(--color-healthcare) !important;
 }
 
 .ai-mic-stop-dot {

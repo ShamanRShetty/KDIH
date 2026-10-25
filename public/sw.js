@@ -10,7 +10,7 @@
  * 6. Protection against caching unwanted 3rd party or sensitive APIs.
  */
 
-const CACHE_NAME = 'nammasahaaya-v6';
+const CACHE_NAME = 'nammasahaaya-v7';
 
 // Core Application Shell assets to pre-cache on install
 const PRECACHE_ASSETS = [
@@ -170,6 +170,7 @@ self.addEventListener('message', async (event) => {
       '/favourites',
       '/practice',
       '/settings',
+      '/me',
       'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Kannada:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap'
     ];
 

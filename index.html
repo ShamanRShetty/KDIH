@@ -6,6 +6,16 @@
   <link rel="icon" type="image/png" href="/logo.png" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('theme');
+        if (saved === 'dark' || saved === 'light') {
+          document.documentElement.setAttribute('data-theme', saved);
+        }
+      } catch (e) {}
+    })();
+  </script>
   <meta name="description"
     content="NammaSahaaya — Your Everyday Kannada Assistant. Speak Kannada with confidence using situation-based phrase cards and guided conversations." />
   <meta name="theme-color" content="#0f4c75" />

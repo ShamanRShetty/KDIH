@@ -196,7 +196,8 @@ export default function PracticePage() {
             type="button"
             className={`mode-toggle-btn ${!listeningMode ? 'mode-toggle-btn--active' : ''}`}
             onClick={() => listeningMode && handleToggleListeningMode()}
-            aria-pressed={!listeningMode}
+            role="radio"
+            aria-checked={!listeningMode}
           >
             🗣️ Speaking
           </button>
@@ -204,7 +205,8 @@ export default function PracticePage() {
             type="button"
             className={`mode-toggle-btn ${listeningMode ? 'mode-toggle-btn--active' : ''}`}
             onClick={() => !listeningMode && handleToggleListeningMode()}
-            aria-pressed={listeningMode}
+            role="radio"
+            aria-checked={listeningMode}
           >
             👂 Listening
           </button>

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { inspectVoices, isAudioSupported } from '../utils/audioUtils';
 import {
   getCacheDetails,
@@ -9,6 +10,16 @@ import {
   prepareOfflineAssets,
 } from '../utils/pwaUtils';
 import { useLang } from '../context/LanguageContext';
+import {
+  RefreshCwIcon,
+  CheckIcon,
+  AlertTriangleIcon,
+  BarChartIcon,
+  SmartphoneIcon,
+  ClockIcon,
+  XIcon,
+  IdCardIcon,
+} from '../components/Icons';
 import './SettingsPage.css';
 
 const FONT_SIZES = [
@@ -235,7 +246,8 @@ export default function SettingsPage() {
               title="Refresh status checks"
               aria-label="Refresh status checks"
             >
-              🔄 Check Again
+              <RefreshCwIcon size={14} />
+              <span>Check Again</span>
             </button>
           </div>
           <p className="settings-section-description">
@@ -246,8 +258,8 @@ export default function SettingsPage() {
             {/* 1. Service Worker Registered & Controlling */}
             <div className={`readiness-card ${swStatus.controlling ? 'readiness-card--pass' : 'readiness-card--fail'}`}>
               <div className="readiness-card-header">
-                <span className="readiness-icon" aria-hidden="true">
-                  {swStatus.controlling ? '✓' : '⚠️'}
+                <span className={`readiness-icon ${swStatus.controlling ? 'readiness-icon--pass' : 'readiness-icon--fail'}`} aria-hidden="true">
+                  {swStatus.controlling ? <CheckIcon size={16} /> : <AlertTriangleIcon size={16} />}
                 </span>
                 <h3 className="readiness-title">Service Worker</h3>
                 <span className={`readiness-badge ${swStatus.controlling ? 'readiness-badge--pass' : 'readiness-badge--fail'}`}>
@@ -266,8 +278,8 @@ export default function SettingsPage() {
             {/* 2. App Files Cached */}
             <div className={`readiness-card ${cacheStatus.totalCached > 0 ? 'readiness-card--pass' : 'readiness-card--fail'}`}>
               <div className="readiness-card-header">
-                <span className="readiness-icon" aria-hidden="true">
-                  {cacheStatus.totalCached > 0 ? '✓' : '⚠️'}
+                <span className={`readiness-icon ${cacheStatus.totalCached > 0 ? 'readiness-icon--pass' : 'readiness-icon--warn'}`} aria-hidden="true">
+                  {cacheStatus.totalCached > 0 ? <CheckIcon size={16} /> : <AlertTriangleIcon size={16} />}
                 </span>
                 <h3 className="readiness-title">App Files Cached</h3>
                 <span className={`readiness-badge ${cacheStatus.totalCached > 0 ? 'readiness-badge--pass' : 'readiness-badge--fail'}`}>
@@ -284,7 +296,9 @@ export default function SettingsPage() {
             {/* 3. Storage Used & Available */}
             <div className="readiness-card readiness-card--pass">
               <div className="readiness-card-header">
-                <span className="readiness-icon" aria-hidden="true">📊</span>
+                <span className="readiness-icon readiness-icon--info" aria-hidden="true">
+                  <BarChartIcon size={16} />
+                </span>
                 <h3 className="readiness-title">Storage Estimate</h3>
                 {storageStatus.percent !== null && (
                   <span className="readiness-badge readiness-badge--info">
@@ -302,8 +316,8 @@ export default function SettingsPage() {
             {/* 4. Kannada Voice on Device */}
             <div className={`readiness-card ${voiceStatus.hasKannada ? 'readiness-card--pass' : 'readiness-card--warn'}`}>
               <div className="readiness-card-header">
-                <span className="readiness-icon" aria-hidden="true">
-                  {voiceStatus.hasKannada ? '✓' : '⚠️'}
+                <span className={`readiness-icon ${voiceStatus.hasKannada ? 'readiness-icon--pass' : 'readiness-icon--warn'}`} aria-hidden="true">
+                  {voiceStatus.hasKannada ? <CheckIcon size={16} /> : <AlertTriangleIcon size={16} />}
                 </span>
                 <h3 className="readiness-title">Kannada Voice (TTS)</h3>
                 <span className={`readiness-badge ${voiceStatus.hasKannada ? 'readiness-badge--pass' : 'readiness-badge--warn'}`}>
@@ -325,7 +339,9 @@ export default function SettingsPage() {
             {/* 5. Install Status */}
             <div className={`readiness-card ${installStatus.isInstalled ? 'readiness-card--pass' : 'readiness-card--info'}`}>
               <div className="readiness-card-header">
-                <span className="readiness-icon" aria-hidden="true">📱</span>
+                <span className="readiness-icon readiness-icon--info" aria-hidden="true">
+                  <SmartphoneIcon size={16} />
+                </span>
                 <h3 className="readiness-title">App Installation</h3>
                 <span className={`readiness-badge ${installStatus.isInstalled ? 'readiness-badge--pass' : 'readiness-badge--info'}`}>
                   {installStatus.isInstalled ? 'Installed' : 'Browser tab'}
@@ -374,9 +390,9 @@ export default function SettingsPage() {
               aria-live="polite"
             >
               <div className="prepare-status-icon" aria-hidden="true">
-                {prepareState.status === 'running' && '⏳'}
-                {prepareState.status === 'success' && '✅'}
-                {prepareState.status === 'error' && '❌'}
+                {prepareState.status === 'running' && <ClockIcon size={18} />}
+                {prepareState.status === 'success' && <CheckIcon size={18} />}
+                {prepareState.status === 'error' && <XIcon size={18} />}
               </div>
               <div className="prepare-status-text">
                 <strong>{prepareState.message}</strong>
@@ -420,6 +436,23 @@ export default function SettingsPage() {
             >
               हिन्दी
             </button>
+          </div>
+        </section>
+
+        {/* Personal About Me Card */}
+        <section className="settings-section" aria-labelledby="aboutme-heading">
+          <h2 id="aboutme-heading" className="settings-section-title">
+            Personal "About Me" Card / ನನ್ನ ಪರಿಚಯ ಪತ್ರ
+          </h2>
+          <p className="settings-section-description">
+            Fill in your preferred spoken language, blood group, allergies, and emergency contact.
+            Shows a high-contrast card with speech audio for clinics, police stations, or shops.
+          </p>
+          <div className="settings-aboutme-container">
+            <Link to="/me" className="btn btn-primary settings-aboutme-cta">
+              <IdCardIcon size={18} />
+              <span>Edit &amp; View "About Me" Card</span>
+            </Link>
           </div>
         </section>
 

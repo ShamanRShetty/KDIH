@@ -9,6 +9,7 @@ import SituationPage from './pages/SituationPage';
 import FavouritesPage from './pages/FavouritesPage';
 import SettingsPage from './pages/SettingsPage';
 import PracticePage from './pages/PracticePage';
+import AboutMePage from './pages/AboutMePage';
 import { registerServiceWorker, applyServiceWorkerUpdate } from './utils/pwaUtils';
 import { LanguageProvider } from './context/LanguageContext';
 import './styles/global.css';
@@ -48,6 +49,7 @@ export default function App() {
         <Route path="/favourites" element={<FavouritesPage />} />
         <Route path="/practice" element={<PracticePage />} />
         <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/me" element={<AboutMePage />} />
         <Route
           path="*"
           element={

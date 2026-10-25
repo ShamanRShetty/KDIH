@@ -1,0 +1,284 @@
+.aboutme-page {
+  padding-bottom: var(--space-2xl, 4rem);
+}
+
+.aboutme-header {
+  margin-bottom: var(--space-lg);
+}
+
+.aboutme-title {
+  font-size: var(--text-2xl, 1.75rem);
+  font-weight: var(--font-bold, 700);
+  color: var(--color-text, #0f172a);
+  margin-bottom: var(--space-xs);
+}
+
+.aboutme-description {
+  font-size: var(--text-base, 1rem);
+  color: var(--color-text-secondary, #64748b);
+  line-height: 1.5;
+  margin-bottom: var(--space-sm);
+}
+
+.aboutme-privacy-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  background-color: var(--color-primary-surface, #e0f2fe);
+  border: 1px solid var(--color-primary-light, #bae6fd);
+  border-radius: var(--radius-full, 9999px);
+  font-size: var(--text-xs, 0.75rem);
+  font-weight: var(--font-medium, 500);
+  color: var(--color-primary, #0369a1);
+}
+
+.aboutme-form-section {
+  background-color: var(--color-surface, #ffffff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-lg, 12px);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-lg);
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.05));
+}
+
+.aboutme-section-title {
+  font-size: var(--text-lg, 1.125rem);
+  font-weight: var(--font-semibold, 600);
+  color: var(--color-text, #0f172a);
+  margin-bottom: var(--space-xs);
+}
+
+.aboutme-section-desc {
+  font-size: var(--text-sm, 0.875rem);
+  color: var(--color-text-secondary, #64748b);
+  margin-bottom: var(--space-md);
+}
+
+/* Checkboxes and Radios styled with 44px touch targets */
+.aboutme-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.aboutme-check-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-height: 44px;
+  padding: 0.375rem var(--space-sm);
+  border-radius: var(--radius-md, 8px);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.aboutme-check-item:hover {
+  background-color: var(--color-surface-hover, #f8fafc);
+  border-color: var(--color-border-light, #e2e8f0);
+}
+
+.aboutme-check-input {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  cursor: pointer;
+  accent-color: var(--color-primary, #0f4c75);
+}
+
+.aboutme-check-label {
+  font-size: var(--text-base, 1rem);
+  color: var(--color-text, #1e293b);
+  user-select: none;
+}
+
+/* Radio chips grid for Languages and Blood Groups */
+.aboutme-chips-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.aboutme-chip-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid var(--color-border, #cbd5e1);
+  background: var(--color-surface, #ffffff);
+  color: var(--color-text, #1e293b);
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.aboutme-chip-btn:hover {
+  border-color: var(--color-primary, #0f4c75);
+  background-color: var(--color-surface-hover, #f8fafc);
+}
+
+.aboutme-chip-btn:focus-visible {
+  outline: 2px solid var(--color-primary, #0f4c75);
+  outline-offset: 2px;
+}
+
+.aboutme-chip-btn--active {
+  background-color: var(--color-primary, #0f4c75);
+  color: #ffffff;
+  border-color: var(--color-primary, #0f4c75);
+}
+
+/* Allergy Multi-Select Chips */
+.aboutme-allergies-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.aboutme-allergy-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 44px;
+  padding: 0.5rem 0.875rem;
+  border-radius: var(--radius-full, 9999px);
+  border: 1px solid var(--color-border, #cbd5e1);
+  background: var(--color-surface, #ffffff);
+  color: var(--color-text, #1e293b);
+  font-size: var(--text-sm, 0.875rem);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.aboutme-allergy-chip:hover {
+  border-color: var(--color-primary, #0f4c75);
+}
+
+.aboutme-allergy-chip:focus-visible {
+  outline: 2px solid var(--color-primary, #0f4c75);
+  outline-offset: 2px;
+}
+
+.aboutme-allergy-chip--active {
+  background-color: #fee2e2;
+  border-color: #fca5a5;
+  color: #991b1b;
+  font-weight: var(--font-medium, 500);
+}
+
+/* Text & Number Inputs */
+.aboutme-input-group {
+  margin-bottom: var(--space-md);
+}
+
+.aboutme-input-label {
+  display: block;
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: var(--font-medium, 500);
+  color: var(--color-text, #1e293b);
+  margin-bottom: var(--space-xs);
+}
+
+.aboutme-input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border, #cbd5e1);
+  border-radius: var(--radius-md, 8px);
+  font-size: var(--text-base, 1rem);
+  color: var(--color-text, #0f172a);
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.aboutme-input:focus {
+  outline: 2px solid var(--color-primary, #0f4c75);
+  outline-offset: 1px;
+  border-color: var(--color-primary, #0f4c75);
+}
+
+/* Floating / Sticky Action Bar */
+.aboutme-action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+  padding: var(--space-md);
+  background-color: var(--color-surface, #ffffff);
+  border: 1px solid var(--color-border, #cbd5e1);
+  border-radius: var(--radius-lg, 12px);
+}
+
+.aboutme-show-btn {
+  min-height: 44px;
+  padding: 0.625rem 1.5rem;
+  font-size: var(--text-base, 1rem);
+  font-weight: var(--font-semibold, 600);
+}
+
+.aboutme-delete-btn {
+  min-height: 44px;
+  padding: 0.5rem 1rem;
+  font-size: var(--text-sm, 0.875rem);
+  color: #b91c1c;
+  background-color: transparent;
+  border: 1px solid #fca5a5;
+  border-radius: var(--radius-md, 8px);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.aboutme-delete-btn:hover {
+  background-color: #fee2e2;
+}
+
+.aboutme-delete-btn:focus-visible {
+  outline: 2px solid #b91c1c;
+  outline-offset: 2px;
+}
+
+/* Inline Confirm Row */
+.aboutme-confirm-box {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  background-color: #fff1f2;
+  border: 1px solid #fecdd3;
+  border-radius: var(--radius-md, 8px);
+}
+
+.aboutme-confirm-text {
+  font-size: var(--text-xs, 0.75rem);
+  color: #9f1239;
+  font-weight: 500;
+}
+
+.aboutme-confirm-yes {
+  min-height: 44px;
+  padding: 0.25rem 0.75rem;
+  background-color: #e11d48;
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-sm, 6px);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.aboutme-confirm-no {
+  min-height: 44px;
+  padding: 0.25rem 0.75rem;
+  background-color: #ffffff;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-sm, 6px);
+  cursor: pointer;
+}

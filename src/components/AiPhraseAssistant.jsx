@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import PhraseCard from './PhraseCard';
 import { findMatchingPhrases } from '../utils/aiPhraseAssistant';
-import { MicIcon, SearchIcon, AlertCircleIcon } from './Icons';
+import { MicIcon, SearchIcon, AlertCircleIcon, XIcon } from './Icons';
 import './AiPhraseAssistant.css';
 
 const SAMPLE_PROMPTS = [
@@ -342,8 +342,9 @@ export default function AiPhraseAssistant({ isFavourite, onToggleFavourite }) {
               className="ai-assistant-clear-btn"
               onClick={handleClear}
               aria-label="Clear input"
+              title="Clear input"
             >
-              ✕
+              <XIcon size={14} />
             </button>
           )}
         </div>

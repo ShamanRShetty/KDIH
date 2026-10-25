@@ -5,7 +5,7 @@ import AiPhraseAssistant from '../components/AiPhraseAssistant';
 import useFavourites from '../hooks/useFavourites';
 import situations from '../data/situations';
 import { getAllPhrases } from '../utils/phraseUtils';
-import { SituationIcon, SearchIcon } from '../components/Icons';
+import { SituationIcon, SearchIcon, XIcon } from '../components/Icons';
 import './ExplorePage.css';
 
 export default function ExplorePage() {
@@ -87,7 +87,7 @@ export default function ExplorePage() {
               aria-label="Clear search"
               title="Clear search"
             >
-              ✕
+              <XIcon size={16} />
             </button>
           )}
         </div>
