@@ -67,6 +67,7 @@
 
 .ai-assistant-category-select {
   width: 100%;
+  min-height: 44px;
   padding: 0.65rem 0.85rem;
   font-size: var(--text-sm);
   color: var(--color-text);
@@ -93,6 +94,7 @@
 
 .ai-assistant-input {
   width: 100%;
+  min-height: 44px;
   padding: 0.65rem 1rem;
   padding-right: 5.5rem;
   font-size: var(--text-sm);
@@ -112,10 +114,10 @@
 .ai-assistant-clear-btn {
   position: absolute;
   right: 3rem;
-  width: 28px;
-  height: 28px;
-  min-width: 28px;
-  min-height: 28px;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -125,6 +127,29 @@
   border: none;
   cursor: pointer;
   transition: all var(--transition-fast);
+}
+
+@media (max-width: 480px) {
+  .ai-assistant {
+    padding: var(--space-md);
+  }
+
+  .ai-assistant-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ai-assistant-category-select-wrap,
+  .ai-assistant-input-box {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .ai-assistant-btn {
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
+  }
 }
 
 .ai-assistant-clear-btn:hover {

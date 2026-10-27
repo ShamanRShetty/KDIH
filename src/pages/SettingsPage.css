@@ -200,6 +200,35 @@
   white-space: nowrap;
 }
 
+@media (max-width: 480px) {
+  .settings-section {
+    padding: var(--space-md);
+  }
+
+  .readiness-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .prepare-offline-box {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .prepare-offline-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .settings-font-options {
+    flex-direction: column;
+  }
+
+  .settings-font-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 /* Prepare Status Banner */
 .prepare-status-banner {
   margin-top: var(--space-md);

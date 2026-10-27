@@ -197,6 +197,8 @@ body {
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
 }
 
 #root {
@@ -226,6 +228,7 @@ button {
   border: none;
   background: none;
   color: inherit;
+  -webkit-tap-highlight-color: transparent;
 }
 
 ul, ol {
@@ -253,7 +256,7 @@ ul, ol {
   width: 100%;
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 var(--space-md);
+  padding: 0 max(var(--space-md), env(safe-area-inset-right, 0px)) 0 max(var(--space-md), env(safe-area-inset-left, 0px));
 }
 
 .sr-only {
@@ -416,7 +419,7 @@ ul, ol {
 .page {
   flex: 1;
   padding-top: var(--space-lg);
-  padding-bottom: calc(var(--nav-height) + var(--space-xl));
+  padding-bottom: calc(var(--nav-height) + var(--space-xl) + env(safe-area-inset-bottom, 0px));
 }
 
 .page-header {

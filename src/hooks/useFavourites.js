@@ -36,5 +36,9 @@ export default function useFavourites() {
     );
   }, []);
 
-  return { favourites, isFavourite, toggleFavourite };
+  const clearAllFavourites = useCallback(() => {
+    setFavourites([]);
+  }, []);
+
+  return { favourites, isFavourite, toggleFavourite, clearAllFavourites };
 }

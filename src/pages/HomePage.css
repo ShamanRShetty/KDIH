@@ -35,7 +35,7 @@
 }
 
 .hero-title {
-  font-size: var(--text-3xl);
+  font-size: clamp(1.75rem, 5vw, 2.25rem);
   font-weight: var(--font-bold);
   color: var(--color-text);
   line-height: 1.25;
@@ -44,7 +44,7 @@
 }
 
 .hero-description {
-  font-size: var(--text-base);
+  font-size: clamp(var(--text-sm), 3.5vw, var(--text-base));
   color: var(--color-text-secondary);
   line-height: 1.6;
   margin: 0 auto var(--space-lg);
@@ -60,6 +60,23 @@
 
 .hero-cta {
   font-size: var(--text-sm);
+  min-height: 44px;
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: var(--space-md) 0 var(--space-xl);
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-cta {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 

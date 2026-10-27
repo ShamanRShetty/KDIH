@@ -37,7 +37,8 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 14px;
+  min-height: 44px;
+  padding: 8px 14px;
   font-size: var(--text-xs);
   font-weight: var(--font-medium);
   border-radius: var(--radius-full);
@@ -416,12 +417,17 @@
   border-radius: var(--radius-full);
   overflow: hidden;
   width: fit-content;
+  max-width: 100%;
   margin: 0 auto var(--space-md);
   background: var(--color-surface);
 }
 
 .mode-toggle-btn {
-  padding: 6px 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 20px;
   font-size: var(--text-sm);
   font-weight: var(--font-medium);
   border: none;
@@ -429,6 +435,18 @@
   color: var(--color-text-secondary);
   cursor: pointer;
   transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+@media (max-width: 360px) {
+  .practice-mode-toggle {
+    width: 100%;
+  }
+
+  .mode-toggle-btn {
+    flex: 1;
+    padding: 8px 10px;
+    font-size: var(--text-xs);
+  }
 }
 
 .mode-toggle-btn--active {
