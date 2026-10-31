@@ -25,7 +25,15 @@ backend/.env
 backend/.env.*
 !backend/.env.example
 
-# IDE & Editor files
+# Test artifacts & review fixtures
+test-review-sample/
+test-ai-assistant.mjs
+
+# AI & Editor tooling
+.gemini/
+.claude/
+.cursor/
+*.code-workspace
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
