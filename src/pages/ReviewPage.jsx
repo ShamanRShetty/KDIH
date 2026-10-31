@@ -7,7 +7,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   SearchIcon,
-  SparklesIcon,
+  EditIcon,
   AlertTriangleIcon,
 } from '../components/Icons';
 import './ReviewPage.css';
@@ -515,7 +515,7 @@ export default function ReviewPage() {
               <form className="review-edit-form" onSubmit={handleSaveNeedsChange} aria-label={`Edit phrase ${currentPhrase.id}`}>
                 <div className="review-edit-header">
                   <div className="review-edit-header-title">
-                    <SparklesIcon size={18} />
+                    <EditIcon size={18} />
                     <h3>Edit &amp; Correct &mdash; <code>{currentPhrase.id}</code></h3>
                   </div>
                   <span className="review-edit-hint">Changes will be saved and marked verified</span>
@@ -654,7 +654,7 @@ export default function ReviewPage() {
           </section>
         ) : (
           <div className="empty-state">
-            <span className="empty-state-icon">🔍</span>
+            <span className="empty-state-icon" aria-hidden="true"><SearchIcon size={32} /></span>
             <p className="empty-state-title">No phrases match your criteria</p>
             <p className="empty-state-description">
               Try adjusting your search query or reset the filter filter pills above.

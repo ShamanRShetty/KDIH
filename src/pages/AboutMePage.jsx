@@ -10,7 +10,7 @@ import {
   getEmergencyContactStatement,
 } from '../data/aboutMeOptions';
 import AboutMeModal from '../components/AboutMeModal';
-import { EyeIcon } from '../components/Icons';
+import { EyeIcon, LockIcon } from '../components/Icons';
 import './AboutMePage.css';
 
 const STORAGE_KEY = 'nammasahaaya_aboutme';
@@ -155,7 +155,8 @@ export default function AboutMePage() {
             to clinic staff, shopkeepers, or transport conductors when you cannot speak the language.
           </p>
           <div className="aboutme-privacy-badge">
-            <span>🔒 Saved only on this phone. Never uploaded or shared.</span>
+            <LockIcon size={14} />
+            <span>Saved only on this phone. Never uploaded or shared.</span>
           </div>
         </header>
 

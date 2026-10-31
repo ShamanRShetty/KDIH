@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import AudioButton from './AudioButton';
 import { stopCurrentAudio } from '../utils/audioUtils';
+import { LockIcon, PhoneIcon } from './Icons';
 import './AboutMeModal.css';
 
 /**
@@ -84,7 +85,8 @@ export default function AboutMeModal({ lines, onClose }) {
                 )}
                 {line.phone && (
                   <a href={`tel:${line.phone}`} className="aboutme-line-phone-link">
-                    📞 Call {line.phone}
+                    <PhoneIcon size={16} />
+                    <span>Call {line.phone}</span>
                   </a>
                 )}
               </div>
@@ -102,7 +104,8 @@ export default function AboutMeModal({ lines, onClose }) {
 
         <footer className="aboutme-modal-footer">
           <span className="aboutme-modal-footer-notice">
-            🔒 Saved only on this phone
+            <LockIcon size={14} />
+            <span>Saved only on this phone</span>
           </span>
           <button
             type="button"

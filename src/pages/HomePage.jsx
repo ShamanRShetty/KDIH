@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import SituationCard from '../components/SituationCard';
 import DailyPhraseCard from '../components/DailyPhraseCard';
-import { IdCardIcon } from '../components/Icons';
+import { IdCardIcon, PackIcon, ArrowRightIcon } from '../components/Icons';
 import situations from '../data/situations';
 import packs from '../data/packs';
 import './HomePage.css';
@@ -59,32 +59,29 @@ export default function HomePage() {
               Open a pack seconds before you need it — auto ride, clinic, market, and more.
             </p>
           </div>
-          <div className="home-packs-preview">
-            {packs.slice(0, 3).map((pack) => (
-              <Link
-                key={pack.id}
-                to={`/packs/${pack.id}`}
-                className="home-pack-chip"
-                aria-label={`${pack.title} quick pack — ${pack.phraseIds.length} phrases`}
-              >
-                <span className="home-pack-chip-icon" aria-hidden="true">{pack.icon}</span>
-                <span className="home-pack-chip-label">{pack.title}</span>
-                <span className="home-pack-chip-count">{pack.phraseIds.length}</span>
-              </Link>
-            ))}
-            <Link
-              to="/packs"
-              className="home-pack-chip home-pack-chip--more"
-              aria-label="View all 6 quick packs"
-            >
-              <span className="home-pack-chip-icon" aria-hidden="true">⚡</span>
-              <span className="home-pack-chip-label">All Packs</span>
-              <span className="home-pack-chip-count">6</span>
+          <div className="home-packs-block">
+            <ul className="home-packs-preview" aria-label="Quick pack shortcuts">
+              {packs.slice(0, 4).map((pack) => (
+                <li key={pack.id}>
+                  <Link
+                    to={`/packs/${pack.id}`}
+                    className="home-pack-chip"
+                    aria-label={`${pack.title} — ${pack.phraseIds.length} phrases`}
+                  >
+                    <span className="home-pack-chip-icon" aria-hidden="true">
+                      <PackIcon packId={pack.id} size={16} />
+                    </span>
+                    <span className="home-pack-chip-label">{pack.title}</span>
+                    <span className="home-pack-chip-count" aria-hidden="true">{pack.phraseIds.length}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <Link to="/packs" className="btn btn-secondary home-packs-cta" aria-label="Browse all Quick Packs">
+              <span>View All {packs.length} Quick Packs</span>
+              <ArrowRightIcon size={16} />
             </Link>
           </div>
-          <Link to="/packs" className="btn btn-primary home-packs-cta" aria-label="Browse all Quick Packs">
-            Browse All Quick Packs →
-          </Link>
         </section>
 
         {/* Situation Categories */}

@@ -7,7 +7,7 @@ import replies from '../data/replies';
 import { getAllPhrases, getPhrasesByCategory } from '../utils/phraseUtils';
 import AudioButton from '../components/AudioButton';
 import { stopCurrentAudio } from '../utils/audioUtils';
-import { SituationIcon, CheckIcon, TargetIcon } from '../components/Icons';
+import { SituationIcon, CheckIcon, TargetIcon, MicIcon, EarIcon } from '../components/Icons';
 import { useLang } from '../context/LanguageContext';
 import './PracticePage.css';
 
@@ -199,7 +199,8 @@ export default function PracticePage() {
             role="radio"
             aria-checked={!listeningMode}
           >
-            🗣️ Speaking
+            <MicIcon size={16} />
+            <span>Speaking</span>
           </button>
           <button
             type="button"
@@ -208,14 +209,15 @@ export default function PracticePage() {
             role="radio"
             aria-checked={listeningMode}
           >
-            👂 Listening
+            <EarIcon size={16} />
+            <span>Listening</span>
           </button>
         </div>
 
         {/* Empty State when no phrases exist in category */}
         {availablePhrases.length === 0 && (
           <div className="empty-state">
-            <span className="empty-state-icon">🎉</span>
+            <span className="empty-state-icon" aria-hidden="true"><TargetIcon size={32} /></span>
             <p className="empty-state-title">No phrases due for review</p>
             <p className="empty-state-description">
               No phrases found in this category. Choose another situation or browse all.

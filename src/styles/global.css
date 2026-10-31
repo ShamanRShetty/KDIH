@@ -46,14 +46,22 @@
   --font-kannada: 'Noto Sans Kannada', 'Inter', sans-serif;
   --font-devanagari: 'Noto Sans Devanagari', 'Mangal', 'Kokila', Arial Unicode MS, sans-serif;
 
-  --text-xs: 0.75rem;     /* 12px */
-  --text-sm: 0.875rem;    /* 14px */
-  --text-base: 1rem;       /* 16px */
-  --text-lg: 1.125rem;    /* 18px */
-  --text-xl: 1.25rem;     /* 20px */
-  --text-2xl: 1.5rem;     /* 24px */
-  --text-3xl: 1.875rem;   /* 30px */
-  --text-4xl: 2.25rem;    /* 36px */
+  --text-xs: 0.75rem;
+  /* 12px */
+  --text-sm: 0.875rem;
+  /* 14px */
+  --text-base: 1rem;
+  /* 16px */
+  --text-lg: 1.125rem;
+  /* 18px */
+  --text-xl: 1.25rem;
+  /* 20px */
+  --text-2xl: 1.5rem;
+  /* 24px */
+  --text-3xl: 1.875rem;
+  /* 30px */
+  --text-4xl: 2.25rem;
+  /* 36px */
 
   --font-regular: 400;
   --font-medium: 500;
@@ -61,14 +69,22 @@
   --font-bold: 700;
 
   /* Spacing Scale */
-  --space-2xs: 0.125rem; /* 2px */
-  --space-xs: 0.25rem;   /* 4px */
-  --space-sm: 0.5rem;    /* 8px */
-  --space-md: 1rem;      /* 16px */
-  --space-lg: 1.5rem;    /* 24px */
-  --space-xl: 2rem;      /* 32px */
-  --space-2xl: 3rem;     /* 48px */
-  --space-3xl: 4rem;     /* 64px */
+  --space-2xs: 0.125rem;
+  /* 2px */
+  --space-xs: 0.25rem;
+  /* 4px */
+  --space-sm: 0.5rem;
+  /* 8px */
+  --space-md: 1rem;
+  /* 16px */
+  --space-lg: 1.5rem;
+  /* 24px */
+  --space-xl: 2rem;
+  /* 32px */
+  --space-2xl: 3rem;
+  /* 48px */
+  --space-3xl: 4rem;
+  /* 64px */
 
   /* Layout & Radii */
   --max-width: 1040px;
@@ -238,7 +254,8 @@ button {
   -webkit-tap-highlight-color: transparent;
 }
 
-ul, ol {
+ul,
+ol {
   list-style: none;
 }
 
@@ -298,9 +315,9 @@ ul, ol {
   cursor: pointer;
   text-decoration: none;
   transition: background-color var(--transition-fast),
-              border-color var(--transition-fast),
-              box-shadow var(--transition-fast),
-              color var(--transition-fast);
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    color var(--transition-fast);
 }
 
 .btn:hover {
@@ -320,7 +337,7 @@ ul, ol {
   background-color: var(--color-primary);
   color: #ffffff;
   border-color: var(--color-primary-dark);
-  box-shadow: 0 1px 2px rgba(15, 76, 117, 0.2);
+  box-shadow: 0 1px 2px var(--color-primary-border-subtle);
 }
 
 .btn-primary:hover {
@@ -331,7 +348,7 @@ ul, ol {
 .btn-secondary {
   background-color: var(--color-primary-surface);
   color: var(--color-primary);
-  border-color: rgba(15, 76, 117, 0.18);
+  border-color: var(--color-primary-border-subtle);
 }
 
 .btn-secondary:hover {
@@ -370,7 +387,7 @@ ul, ol {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   transition: border-color var(--transition-fast),
-              box-shadow var(--transition-base);
+    box-shadow var(--transition-base);
 }
 
 .card:hover {
@@ -453,6 +470,7 @@ ul, ol {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -487,6 +505,7 @@ ul, ol {
   }
 }
 
+
 /* --- PWA Update Notification Banner --- */
 .update-banner {
   background-color: var(--color-primary-surface);
@@ -511,4 +530,3 @@ ul, ol {
   font-size: var(--text-xs);
   white-space: nowrap;
 }
-

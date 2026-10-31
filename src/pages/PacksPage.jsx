@@ -1,42 +1,55 @@
 import { Link } from 'react-router-dom';
 import packs from '../data/packs';
+import { PackIcon, ArrowRightIcon } from '../components/Icons';
 import './PacksPage.css';
 
 /**
- * /packs — Grid of 6 Quick Pack cards.
- * Each card links to /packs/:packId for the step-through player.
+ * /packs — Grid of Quick Pack cards.
+ * Uses shared design system card patterns identical to SituationCard.
  */
 export default function PacksPage() {
   return (
     <main className="page packs-page">
       <div className="container">
-        <header className="packs-header">
-          <h1 className="packs-title">Quick Packs</h1>
-          <p className="packs-description">
+        {/* Navigation Breadcrumb matching SituationPage */}
+        <div className="packs-nav-links">
+          <Link to="/" className="packs-back-link">
+            Home
+          </Link>
+          <span className="packs-nav-divider">/</span>
+          <span className="packs-nav-current">Quick Packs</span>
+        </div>
+
+        <div className="page-header packs-header">
+          <h1 className="page-title">Quick Packs</h1>
+          <p className="page-subtitle">
             Curated phrase sets for common real-life moments. Open a pack seconds before you need it.
           </p>
-        </header>
+        </div>
 
         <div className="packs-grid" role="list">
           {packs.map((pack) => (
             <Link
               key={pack.id}
               to={`/packs/${pack.id}`}
-              className="pack-card"
+              className="pack-card card card-interactive"
               role="listitem"
-              aria-label={`${pack.title} pack — ${pack.phraseIds.length} phrases. ${pack.whenToUse}`}
             >
               <div className="pack-card-icon" aria-hidden="true">
-                {pack.icon}
+                <PackIcon packId={pack.id} size={22} />
               </div>
               <div className="pack-card-body">
-                <h2 className="pack-card-title">{pack.title}</h2>
+                <div className="pack-card-header-row">
+                  <h2 className="pack-card-title">{pack.title}</h2>
+                  <span className="pack-card-count" aria-label={`${pack.phraseIds.length} phrases`}>
+                    {pack.phraseIds.length} phrases
+                  </span>
+                </div>
                 <p className="pack-card-when">{pack.whenToUse}</p>
-                <span className="pack-card-count">
-                  {pack.phraseIds.length} phrases
-                </span>
               </div>
-              <span className="pack-card-arrow" aria-hidden="true">›</span>
+              <div className="pack-card-arrow" aria-hidden="true">
+                <ArrowRightIcon size={18} />
+              </div>
             </Link>
           ))}
         </div>
@@ -44,4 +57,3 @@ export default function PacksPage() {
     </main>
   );
 }
-

@@ -9,6 +9,17 @@ import AudioButton from '../components/AudioButton';
 import PhraseShowModal from '../components/PhraseShowModal';
 import WordByWordPlayer from '../components/WordByWordPlayer';
 import { getMatchedWords } from '../utils/phraseUtils';
+import {
+  PackIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  EyeIcon,
+  BookOpenIcon,
+  MessageSquareIcon,
+  LightbulbIcon,
+  SearchIcon,
+  CheckIcon,
+} from '../components/Icons';
 import './PackDetailPage.css';
 
 /** Build a lookup map from the full phrases array so we can resolve by id. */
@@ -78,7 +89,7 @@ export default function PackDetailPage() {
       <main className="page pack-detail-page">
         <div className="container">
           <div className="empty-state">
-            <span className="empty-state-icon">🔍</span>
+            <span className="empty-state-icon" aria-hidden="true"><SearchIcon size={32} /></span>
             <p className="empty-state-title">Pack not found</p>
             <Link to="/packs" className="btn btn-primary">
               Back to Packs
@@ -106,13 +117,16 @@ export default function PackDetailPage() {
       <main className="page pack-detail-page">
         <div className="container">
           <div className="pack-done" role="region" aria-label="Pack complete">
-            <span className="pack-done-icon" aria-hidden="true">🎉</span>
-            <h1 className="pack-done-title">Pack done!</h1>
+            <span className="pack-done-icon" aria-hidden="true"><CheckIcon size={36} /></span>
+            <h1 className="pack-done-title">Pack Complete</h1>
             <p className="pack-done-sub">
               You have reviewed all {phrases.length} phrases in <strong>{pack.title}</strong>.
             </p>
             <div className="pack-done-tips" aria-label="Etiquette tips">
-              <h2 className="pack-tips-heading">💡 Tips for this situation</h2>
+              <h2 className="pack-tips-heading">
+                <LightbulbIcon size={18} />
+                <span>Tips for this situation</span>
+              </h2>
               <ul className="pack-tips-list">
                 {pack.tips.map((tip, i) => (
                   <li key={i} className="pack-tip-item">{tip}</li>
@@ -152,24 +166,34 @@ export default function PackDetailPage() {
       />
 
       <div className="container">
-        {/* ── Top bar ── */}
-        <header className="pack-topbar">
-          <Link
-            to="/packs"
-            className="pack-back-link"
-            aria-label="Back to all packs"
-            onClick={() => stopCurrentAudio()}
-          >
-            ← Packs
+        {/* Breadcrumb matching SituationPage */}
+        <div className="pack-nav-links">
+          <Link to="/" className="pack-back-link-crumb" onClick={() => stopCurrentAudio()}>
+            Home
           </Link>
-          <div className="pack-topbar-center">
-            <span className="pack-topbar-icon" aria-hidden="true">{pack.icon}</span>
-            <span className="pack-topbar-title">{pack.title}</span>
-          </div>
-          <span className="pack-topbar-counter" aria-label={`Phrase ${step + 1} of ${phrases.length}`}>
-            {step + 1} / {phrases.length}
+          <span className="pack-nav-divider">/</span>
+          <Link to="/packs" className="pack-back-link-crumb" onClick={() => stopCurrentAudio()}>
+            Quick Packs
+          </Link>
+          <span className="pack-nav-divider">/</span>
+          <span className="pack-nav-current">{pack.title}</span>
+        </div>
+
+        {/* ── Pack Header Banner matching SituationPage header ── */}
+        <div className="pack-detail-header">
+          <span className="pack-detail-header-icon" aria-hidden="true">
+            <PackIcon packId={pack.id} size={28} />
           </span>
-        </header>
+          <div className="pack-detail-header-body">
+            <div className="pack-detail-header-row">
+              <h1 className="pack-detail-header-title">{pack.title}</h1>
+              <span className="pack-step-badge" aria-label={`Step ${step + 1} of ${phrases.length}`}>
+                Phrase {step + 1} of {phrases.length}
+              </span>
+            </div>
+            <p className="pack-detail-header-when">{pack.whenToUse}</p>
+          </div>
+        </div>
 
         {/* ── Progress bar ── */}
         <div
@@ -230,7 +254,8 @@ export default function PackDetailPage() {
               aria-label={`Show "${englishText || kannadaText}" in large view to another person`}
               title="Show to person (large view)"
             >
-              👁 Show
+              <EyeIcon size={16} />
+              <span>Show</span>
             </button>
 
             {/* Word by word */}
@@ -247,7 +272,8 @@ export default function PackDetailPage() {
                 }
                 title="Word by word"
               >
-                📖 Word by word
+                <BookOpenIcon size={16} />
+                <span>Word by word</span>
               </button>
             )}
 
@@ -265,7 +291,8 @@ export default function PackDetailPage() {
                 }
                 title="They may reply"
               >
-                💬 They may reply
+                <MessageSquareIcon size={16} />
+                <span>They may reply</span>
               </button>
             )}
           </div>
@@ -313,36 +340,29 @@ export default function PackDetailPage() {
         >
           <button
             type="button"
-            className="pack-nav-btn pack-nav-prev"
+            className="btn btn-secondary pack-nav-btn pack-nav-prev"
             onClick={() => setStep((s) => s - 1)}
             disabled={step === 0}
             aria-label="Previous phrase"
           >
-            ← Back
+            <ChevronLeftIcon size={16} />
+            <span>Previous</span>
           </button>
 
           <button
             type="button"
-            className="pack-nav-btn pack-nav-next"
+            className="btn btn-primary pack-nav-btn pack-nav-next"
             onClick={() => setStep((s) => s + 1)}
             aria-label={step === phrases.length - 1 ? 'Finish pack' : 'Next phrase'}
           >
-            {step === phrases.length - 1 ? 'Finish ✓' : 'Next →'}
+            <span>{step === phrases.length - 1 ? 'Finish Pack' : 'Next Phrase'}</span>
+            {step === phrases.length - 1 ? <CheckIcon size={16} /> : <ChevronRightIcon size={16} />}
           </button>
         </nav>
 
-        {/* ── Tips (collapsed footer) ── */}
-        <aside className="pack-tips-aside" aria-label="Etiquette tips for this pack">
-          <h2 className="pack-tips-aside-heading">💡 Tips</h2>
-          <ul className="pack-tips-aside-list">
-            {pack.tips.map((tip, i) => (
-              <li key={i} className="pack-tips-aside-item">{tip}</li>
-            ))}
-          </ul>
-        </aside>
+        {/* Show-to-person modal — reuses existing PhraseShowModal */}
       </div>
 
-      {/* Show-to-person modal — reuses existing PhraseShowModal */}
       {showModal && phrase && (
         <PhraseShowModal
           phrase={phrase}

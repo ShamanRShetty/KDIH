@@ -163,8 +163,6 @@
   justify-content: center;
   padding: var(--space-md);
   background-color: rgba(10, 24, 38, 0.72);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
   animation: favouritesFadeIn var(--transition-fast) ease-out;
 }
 
