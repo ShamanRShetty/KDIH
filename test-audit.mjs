@@ -90,7 +90,16 @@ for (const phrase of phrases) {
   }
 
   assert.ok(VALID_CATEGORIES.has(phrase.category), `Invalid category ${phrase.category} in ${phrase.id}`);
-  assert.strictEqual(phrase.verificationStatus, 'needs_review', `Phrase ${phrase.id} verificationStatus must be 'needs_review'`);
+  assert.ok(
+    phrase.verificationStatus === 'needs_review' || phrase.verificationStatus === 'verified',
+    `Phrase ${phrase.id} verificationStatus must be 'needs_review' or 'verified' (got '${phrase.verificationStatus}')`
+  );
+
+  // Check optional reviewedBy field
+  if (phrase.reviewedBy !== undefined) {
+    assert.strictEqual(typeof phrase.reviewedBy, 'string', `reviewedBy in ${phrase.id} must be a string`);
+    assert.ok(phrase.reviewedBy.trim().length > 0, `reviewedBy in ${phrase.id} cannot be empty if specified`);
+  }
 
   // Check Kannada Unicode range
   const hasKannadaUnicode = /[\u0C80-\u0CFF]/.test(phrase.kannada);

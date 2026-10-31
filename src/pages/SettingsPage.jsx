@@ -456,6 +456,22 @@ export default function SettingsPage() {
           </div>
         </section>
 
+        {/* Linguistic Review for Native Speakers */}
+        <section className="settings-section" aria-labelledby="review-heading">
+          <h2 id="review-heading" className="settings-section-title">
+            Help check the Kannada / ಕನ್ನಡ ಪರಿಶೀಲನೆ
+          </h2>
+          <p className="settings-section-description">
+            Are you a native or fluent Kannada speaker? Help verify everyday phrases, correct typos, and improve spoken nuances for newcomers in Bengaluru.
+          </p>
+          <div className="settings-review-container">
+            <Link to="/review" className="btn btn-primary settings-review-cta">
+              <CheckIcon size={18} />
+              <span>Help check the Kannada</span>
+            </Link>
+          </div>
+        </section>
+
         {/* Accessibility: Font Size */}
         <section className="settings-section" aria-labelledby="font-size-heading">
           <h2 id="font-size-heading" className="settings-section-title">

@@ -140,11 +140,35 @@ export default function PhraseCard({ phrase, isFavourite = false, onToggleFavour
       >
         <div className="phrase-card-main">
           <div className="phrase-card-text">
-            {subcategoryText && (
-              <span className="phrase-card-subcategory">
-                {subcategoryText}
-              </span>
-            )}
+            <div className="phrase-card-header-tags">
+              {subcategoryText && (
+                <span className="phrase-card-subcategory">
+                  {subcategoryText}
+                </span>
+              )}
+              {phrase.verificationStatus === 'verified' && (
+                <span
+                  className="phrase-card-verified-badge"
+                  aria-label="Verified phrase"
+                  title={phrase.reviewedBy ? `Verified by ${phrase.reviewedBy}` : 'Verified'}
+                >
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                  <span>Verified</span>
+                </span>
+              )}
+            </div>
             <p
               id={phrase.id ? `phrase-title-${phrase.id}` : undefined}
               className="phrase-card-kannada kannada-text"

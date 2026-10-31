@@ -10,6 +10,9 @@ import FavouritesPage from './pages/FavouritesPage';
 import SettingsPage from './pages/SettingsPage';
 import PracticePage from './pages/PracticePage';
 import AboutMePage from './pages/AboutMePage';
+import ReviewPage from './pages/ReviewPage';
+import PacksPage from './pages/PacksPage';
+import PackDetailPage from './pages/PackDetailPage';
 import { registerServiceWorker, applyServiceWorkerUpdate } from './utils/pwaUtils';
 import { LanguageProvider } from './context/LanguageContext';
 import './styles/global.css';
@@ -50,6 +53,9 @@ export default function App() {
         <Route path="/practice" element={<PracticePage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/me" element={<AboutMePage />} />
+        <Route path="/review" element={<ReviewPage />} />
+        <Route path="/packs" element={<PacksPage />} />
+        <Route path="/packs/:packId" element={<PackDetailPage />} />
         <Route
           path="*"
           element={

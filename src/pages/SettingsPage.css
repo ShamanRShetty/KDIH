@@ -382,3 +382,18 @@
   color: var(--color-text-muted);
   font-size: var(--text-xs);
 }
+
+.settings-review-container {
+  display: flex;
+  margin-top: var(--space-sm);
+}
+
+.settings-review-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: 0 var(--space-lg);
+  text-decoration: none;
+  font-weight: var(--font-semibold);
+}

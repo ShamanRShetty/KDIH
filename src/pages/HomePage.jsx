@@ -3,6 +3,7 @@ import SituationCard from '../components/SituationCard';
 import DailyPhraseCard from '../components/DailyPhraseCard';
 import { IdCardIcon } from '../components/Icons';
 import situations from '../data/situations';
+import packs from '../data/packs';
 import './HomePage.css';
 
 export default function HomePage() {
@@ -46,6 +47,44 @@ export default function HomePage() {
 
           {/* Phrase of the Day & Streak Card */}
           <DailyPhraseCard />
+        </section>
+
+        {/* Quick Packs — situational phrase bundles */}
+        <section className="home-quick-packs" aria-labelledby="packs-heading">
+          <div className="section-header">
+            <h2 id="packs-heading" className="section-heading">
+              Quick Packs
+            </h2>
+            <p className="section-subheading">
+              Open a pack seconds before you need it — auto ride, clinic, market, and more.
+            </p>
+          </div>
+          <div className="home-packs-preview">
+            {packs.slice(0, 3).map((pack) => (
+              <Link
+                key={pack.id}
+                to={`/packs/${pack.id}`}
+                className="home-pack-chip"
+                aria-label={`${pack.title} quick pack — ${pack.phraseIds.length} phrases`}
+              >
+                <span className="home-pack-chip-icon" aria-hidden="true">{pack.icon}</span>
+                <span className="home-pack-chip-label">{pack.title}</span>
+                <span className="home-pack-chip-count">{pack.phraseIds.length}</span>
+              </Link>
+            ))}
+            <Link
+              to="/packs"
+              className="home-pack-chip home-pack-chip--more"
+              aria-label="View all 6 quick packs"
+            >
+              <span className="home-pack-chip-icon" aria-hidden="true">⚡</span>
+              <span className="home-pack-chip-label">All Packs</span>
+              <span className="home-pack-chip-count">6</span>
+            </Link>
+          </div>
+          <Link to="/packs" className="btn btn-primary home-packs-cta" aria-label="Browse all Quick Packs">
+            Browse All Quick Packs →
+          </Link>
         </section>
 
         {/* Situation Categories */}
