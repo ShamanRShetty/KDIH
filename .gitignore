@@ -30,7 +30,6 @@ test-review-sample/
 test-ai-assistant.mjs
 
 # AI & Editor tooling
-.gemini/
 .claude/
 .cursor/
 *.code-workspace
@@ -44,6 +43,8 @@ test-ai-assistant.mjs
 *.sln
 *.sw?
 *.swo
+.gemini/
+.impeccable/
 
 # OS metadata & temporary files
 .DS_Store
